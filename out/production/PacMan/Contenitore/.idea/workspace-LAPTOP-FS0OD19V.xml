@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="PacMan:jar" />
+    </artifacts-to-build>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d3b257a3-a478-4269-a952-cba9dc18d7ea" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="21290yQndJITw9AHXuOTx3xxNt3" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+  </component>
+  <component name="RunManager">
+    <configuration name="pacman" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="Contenitore.board1" />
+      <module name="PacMan" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d3b257a3-a478-4269-a952-cba9dc18d7ea" name="Changes" comment="" />
+      <created>1637128098024</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1637128098024</updated>
+      <workItem from="1637128099649" duration="338000" />
+      <workItem from="1637141711665" duration="4138000" />
+      <workItem from="1637219555169" duration="4555000" />
+      <workItem from="1637305480690" duration="4153000" />
+      <workItem from="1637415050583" duration="2889000" />
+      <workItem from="1637565956962" duration="342000" />
+      <workItem from="1637576753972" duration="421000" />
+      <workItem from="1637660146325" duration="4108000" />
+      <workItem from="1637747189247" duration="3142000" />
+      <workItem from="1638131590769" duration="992000" />
+      <workItem from="1638178877473" duration="4008000" />
+      <workItem from="1638185549671" duration="1412000" />
+      <workItem from="1638351360823" duration="6029000" />
+      <workItem from="1638439756628" duration="664000" />
+      <workItem from="1638869415940" duration="97000" />
+      <workItem from="1640515376716" duration="121000" />
+      <workItem from="1643898962499" duration="107000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
