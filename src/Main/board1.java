@@ -19,9 +19,9 @@ public class board1 extends JPanel implements ActionListener, KeyListener {
     int colonna = 36;
     int riga = 36;
     boolean game = true;
-    Palline palline;
+    Cookies cookies;
     Pacman pacman;
-    public Fantasmino rosso, rosa, blue, arancione;
+    public Ghost rosso, rosa, blue, arancione;
     int index = 0;
     static final int R = 21;
     static final int C = 19;
@@ -68,30 +68,30 @@ public class board1 extends JPanel implements ActionListener, KeyListener {
         loadImage(pacman3);
         pacman4 = Toolkit.getDefaultToolkit().createImage(path + "\\pacman4.png");
         loadImage(pacman4);
-        fantasmarosso1 = Toolkit.getDefaultToolkit().createImage(path + "\\rosso.png");
+        fantasmarosso1 = Toolkit.getDefaultToolkit().createImage(path + "\\redGhost.png");
         loadImage(fantasmarosso1);
-        fantasmablue1 = Toolkit.getDefaultToolkit().createImage(path + "\\blue.png");
+        fantasmablue1 = Toolkit.getDefaultToolkit().createImage(path + "\\blueGhost.png");
         loadImage(fantasmablue1);
-        fantasmaarancione = Toolkit.getDefaultToolkit().createImage(path + "\\arancione.png");
+        fantasmaarancione = Toolkit.getDefaultToolkit().createImage(path + "\\orangeGhost.png");
         loadImage(fantasmaarancione);
-        chiuso = Toolkit.getDefaultToolkit().createImage(path + "\\chiuso.png");
+        chiuso = Toolkit.getDefaultToolkit().createImage(path + "\\pacmanFull.png");
         loadImage(chiuso);
-        gameover = Toolkit.getDefaultToolkit().createImage(path + "\\gameover2.png");
+        gameover = Toolkit.getDefaultToolkit().createImage(path + "\\gameover.png");
         loadImage(gameover);
-        fantasmarosa1 = Toolkit.getDefaultToolkit().createImage(path + "\\rosa.png");
+        fantasmarosa1 = Toolkit.getDefaultToolkit().createImage(path + "\\pinkGhost.png");
         loadImage(fantasmarosa1);
-        fantasmascared = Toolkit.getDefaultToolkit().createImage(path + "\\scared.png");
+        fantasmascared = Toolkit.getDefaultToolkit().createImage(path + "\\scaredGhost.png");
         loadImage(fantasmascared);
         eyes = Toolkit.getDefaultToolkit().createImage(path + "\\eyes.png");
         loadImage(eyes);
 
 
         pacman = new Pacman();
-        palline = new Palline();
-        rosso = new Fantasmino(pacman, 326, 252, "right", 0);
-        rosa = new Fantasmino(pacman, 326, 324, "up", 4);
-        blue = new Fantasmino(pacman, 290, 324, "right", 2, rosso);
-        arancione = new Fantasmino(pacman, 358, 324, "left", 8, rosso);
+        cookies = new Cookies();
+        rosso = new Ghost(pacman, 326, 252, "right", 0);
+        rosa = new Ghost(pacman, 326, 324, "up", 4);
+        blue = new Ghost(pacman, 290, 324, "right", 2, rosso);
+        arancione = new Ghost(pacman, 358, 324, "left", 8, rosso);
 
 //        System.out.println(board1.nColonna(362));
 
@@ -126,22 +126,27 @@ public class board1 extends JPanel implements ActionListener, KeyListener {
     }
 
     public void paintComponent(Graphics g) {
+
+        super.paintComponent(g);
+
+
         setOpaque(false);
         if (game) {
             g.drawImage(sfondo, 0, 0, null);
-            if (secondi % 180 > 60) {
-                if (numero == 1) {
-                    g.drawImage(pacman1, pacman.posx + 2, pacman.posy + 1, null);
-                } else if (numero == 2) {
-                    g.drawImage(pacman2, pacman.posx + 2, pacman.posy + 1, null);
-                } else if (numero == 3) {
-                    g.drawImage(pacman3, pacman.posx + 2, pacman.posy + 1, null);
-                } else if (numero == 4) {
-                    g.drawImage(pacman4, pacman.posx + 2, pacman.posy + 1, null);
-                }
-            } else {
-                g.drawImage(chiuso, pacman.posx + 2, pacman.posy + 1, null);
-            }
+//            if (secondi % 180 > 60) {
+//                if (numero == 1) {
+//                    g.drawImage(pacman1, pacman.posx + 2, pacman.posy + 1, null);
+//                } else if (numero == 2) {
+//                    g.drawImage(pacman2, pacman.posx + 2, pacman.posy + 1, null);
+//                } else if (numero == 3) {
+//                    g.drawImage(pacman3, pacman.posx + 2, pacman.posy + 1, null);
+//                } else if (numero == 4) {
+//                    g.drawImage(pacman4, pacman.posx + 2, pacman.posy + 1, null);
+//                }
+//            } else {
+//                g.drawImage(chiuso, pacman.posx + 2, pacman.posy + 1, null);
+//            }
+            pacman.draw(g);
 
 
             //		for(int i = 0; i<21; i++) {
@@ -151,8 +156,8 @@ public class board1 extends JPanel implements ActionListener, KeyListener {
 
             g.setColor(Color.YELLOW);
             for (int i = 0; i < (19 * 21 * 5); i++) {
-                if (palline.p[i]) {
-                    g.fillOval((palline.mPos[i][0] + 1), (palline.mPos[i][1] + 1), 8, 8);
+                if (cookies.p[i]) {
+                    g.fillOval((cookies.mPos[i][0] + 1), (cookies.mPos[i][1] + 1), 8, 8);
                 }
             }
 
@@ -193,7 +198,7 @@ public class board1 extends JPanel implements ActionListener, KeyListener {
                 if (!arancione.scared) {
                     g.drawImage(fantasmaarancione, arancione.posx + 2, arancione.posy + 1, null);
                 } else {
-                    if (tempo_mela <= 6000 && palline.startArancione || (tempo_mela > 6000 && tempo_mela < 8000 && tempo_mela % 180 > 30 && palline.startArancione)) {
+                    if (tempo_mela <= 6000 && cookies.startArancione || (tempo_mela > 6000 && tempo_mela < 8000 && tempo_mela % 180 > 30 && cookies.startArancione)) {
                         g.drawImage(fantasmascared, arancione.posx + 2, arancione.posy + 1, null);
                     } else {
                         g.drawImage(fantasmaarancione, arancione.posx + 2, arancione.posy + 1, null);
@@ -219,7 +224,7 @@ public class board1 extends JPanel implements ActionListener, KeyListener {
             }
 
         } else {
-            if (!palline.vinto) {
+            if (!cookies.vinto) {
                 g.drawImage(gameover, 0, 0, null);
             } else {
                 g.drawImage(vinto, 0, 0, null);
@@ -227,7 +232,6 @@ public class board1 extends JPanel implements ActionListener, KeyListener {
 
         }
 
-        super.paintComponent(g);
     }
 
     private void loadImage(Image img) {
@@ -266,7 +270,7 @@ public class board1 extends JPanel implements ActionListener, KeyListener {
                 arancione.mangiato();
                 blue.mangiato();
                 pacman = new Pacman();
-                palline = new Palline();
+                cookies = new Cookies();
                 tempo_mela = 0;
                 posMele = new int[][]{    // nriga - ncolonna
                         {2, 1},
@@ -330,7 +334,7 @@ public class board1 extends JPanel implements ActionListener, KeyListener {
             }
 
             checkMela();
-            palline.mangia(pacman.posx, pacman.posy);
+            cookies.mangia(pacman.posx, pacman.posy);
 
             if (secondi <= 5000) {
                 rosso.muovi(true);
@@ -342,7 +346,7 @@ public class board1 extends JPanel implements ActionListener, KeyListener {
                 rosa.muovi(false);
                 blue.muovi(false);
 
-                if (palline.startArancione) {
+                if (cookies.startArancione) {
                     arancione.muovi(false);
                 }
 
@@ -404,7 +408,7 @@ public class board1 extends JPanel implements ActionListener, KeyListener {
             }
         }
 
-        if (palline.vinto) {
+        if (cookies.vinto) {
             timer.stop();
             game = false;
         }

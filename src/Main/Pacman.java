@@ -1,6 +1,9 @@
 package Contenitore.Main;
 
-public class Pacman {
+import javax.swing.*;
+import java.awt.*;
+
+public class Pacman extends JPanel {
 
     int colonna = 36;
     int riga = 36;
@@ -8,10 +11,19 @@ public class Pacman {
     public int posy = riga * 15;
     public String dir = "";
     public String dirTrans = "";
+    Image pacman1 = Toolkit.getDefaultToolkit().createImage("./src/images" + "\\pacman1.png");
+
 
     public Pacman() {
 
     }
+
+
+    public void draw(Graphics g){
+        g.drawImage(pacman1, posx + 2, posy + 1, null);
+
+    }
+
 
     public void muovi() {
 

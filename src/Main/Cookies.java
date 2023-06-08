@@ -1,6 +1,8 @@
 package Contenitore.Main;
 
-public class Palline {
+import javax.swing.*;
+
+public class Cookies extends JPanel {
     public int mPos[][];
     public boolean p[];
     int numero = 0;
@@ -33,7 +35,7 @@ public class Palline {
     };
     public int index = 0;
 
-    public Palline() {
+    public Cookies() {
         mPos = new int[(19 * 21 * 5)][2];
         p = new boolean[(19 * 21 * 5)];
         mappaPalline();

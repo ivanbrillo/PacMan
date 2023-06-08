@@ -1,20 +1,21 @@
 package Contenitore.Main;
 
+import javax.swing.*;
 import java.util.Random;
 
-public class Fantasmino {
+public class Ghost extends JPanel {
     public int posx, posy;
     int iniziox, inizioy;
     public String dir = "right";
     String iniziodir;
     public Pacman pacman;
     public int spostamento = 2;
-    public Fantasmino rosso;
+    public Ghost rosso;
     int target;
     public boolean scared = false;
     boolean mangiato = false;
 
-    public Fantasmino(Pacman pacman, int posx, int posy, String dir, int target) {
+    public Ghost(Pacman pacman, int posx, int posy, String dir, int target) {
         this.pacman = pacman;
         this.iniziox = posx;
         this.inizioy = posy;
@@ -26,7 +27,9 @@ public class Fantasmino {
         rosso = this;
     }
 
-    public Fantasmino(Pacman pacman, int posx, int posy, String dir, int target, Fantasmino rosso) {
+
+
+    public Ghost(Pacman pacman, int posx, int posy, String dir, int target, Ghost rosso) {
 
         this(pacman, posx, posy, dir, target);
         this.rosso = rosso;

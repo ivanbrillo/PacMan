@@ -1,17 +1,15 @@
 package Contenitore.Main;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
-import java.util.Hashtable;
 
 public class Board extends KeyAdapter implements ActionListener  {
 
     private final Timer timer = new Timer(15, this);
 
-    private Palline palline;
+    private Cookies cookies;
     private Pacman pacman;
-    private Fantasmino rosso, rosa, blue, arancione;
+    private Ghost rosso, rosa, blue, arancione;
 
     private final boolean[][] board = {
             {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true},
@@ -43,12 +41,12 @@ public class Board extends KeyAdapter implements ActionListener  {
 
 
         pacman = new Pacman();
-        palline = new Palline();
+        cookies = new Cookies();
         // TODO: 08/06/2023 ghosts behavioural patter
-        rosso = new Fantasmino(pacman, 326, 252, "right", 0);
-        rosa = new Fantasmino(pacman, 326, 324, "up", 4);
-        blue = new Fantasmino(pacman, 290, 324, "right", 2, rosso);
-        arancione = new Fantasmino(pacman, 358, 324, "left", 8, rosso);
+        rosso = new Ghost(pacman, 326, 252, "right", 0);
+        rosa = new Ghost(pacman, 326, 324, "up", 4);
+        blue = new Ghost(pacman, 290, 324, "right", 2, rosso);
+        arancione = new Ghost(pacman, 358, 324, "left", 8, rosso);
 
         timer.start();
 
