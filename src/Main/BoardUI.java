@@ -8,7 +8,7 @@ public class BoardUI extends JPanel {
 
     private final Hashtable<String, Image> images = new Hashtable<>();
 //    private final String[] pathImages = {"board", "pacman1", "pacman2", "pacman3", "pacman4", "redGhost", "blueGhost", "orangeGhost", "pacmanFull", "gameover", "pinkGhost", "scaredGhost", "eyes"};
-    private final Image background = Toolkit.getDefaultToolkit().createImage("board");
+    private final Image background = Toolkit.getDefaultToolkit().createImage("./src/images/"+"board.png");
     private final Pacman pacman;
     private final Ghost pinkGhost, orangeGhost, blueGhost, redGhost;
     private final Cookies balls;
@@ -37,12 +37,12 @@ public class BoardUI extends JPanel {
         setOpaque(false);
         g.drawImage(background, 0, 0, null);
 
-        pacman.paintComponents(g);
-        redGhost.paintComponents(g);
-        blueGhost.paintComponents(g);
-        orangeGhost.paintComponents(g);
-        pinkGhost.paintComponents(g);
-        balls.paintComponents(g);
+        pacman.draw(g);
+//        redGhost.paintComponents(g);
+//        blueGhost.paintComponents(g);
+//        orangeGhost.paintComponents(g);
+//        pinkGhost.paintComponents(g);
+//        balls.paintComponents(g);
 
     }
 

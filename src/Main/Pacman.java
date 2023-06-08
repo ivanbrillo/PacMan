@@ -20,6 +20,7 @@ public class Pacman extends JPanel {
 
 
     public void draw(Graphics g){
+        System.out.println("acua");
         g.drawImage(pacman1, posx + 2, posy + 1, null);
 
     }

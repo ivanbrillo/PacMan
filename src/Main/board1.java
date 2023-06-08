@@ -287,8 +287,8 @@ public class board1 extends JPanel implements ActionListener, KeyListener {
     }
 
     public static void main(String[] args) {
-        GraphicsEnvironment graphics = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice device = graphics.getDefaultScreenDevice();
+//        GraphicsEnvironment graphics = GraphicsEnvironment.getLocalGraphicsEnvironment();
+//        GraphicsDevice device = graphics.getDefaultScreenDevice();
         JFrame f = new JFrame();
         board1 b = new board1();
         f.add(b);
