@@ -1,26 +1,28 @@
 package Contenitore.Main;
 
-import javax.swing.*;
+import java.awt.*;
 import java.util.Random;
 
-public class Ghost extends JPanel {
-    public int posx, posy;
-    int iniziox, inizioy;
-    public String dir = "right";
+public class Ghost extends ComponentUI {
+//    public int position.x, position.y;
+    private int startX, startY;
+    private String dir;
     String iniziodir;
-    public Pacman pacman;
-    public int spostamento = 2;
-    public Ghost rosso;
-    int target;
+    private Pacman pacman;
+    private Ghost rosso;
+    private int target;
     public boolean scared = false;
     boolean mangiato = false;
 
-    public Ghost(Pacman pacman, int posx, int posy, String dir, int target) {
+    public Ghost(Pacman pacman, int x, int y, String dir, int target) {
+
+        super("pinkGhost", new Point(x, y));
+
         this.pacman = pacman;
-        this.iniziox = posx;
-        this.inizioy = posy;
-        this.posx = posx; //326;
-        this.posy = posy; //252;
+        this.startX = x;
+        this.startY = y;
+//        this.position.x = position.x; //326;
+//        position.y = position.y; //252;
         this.dir = dir;
         this.iniziodir = dir;
         this.target = target;
@@ -28,59 +30,58 @@ public class Ghost extends JPanel {
     }
 
 
+    public Ghost(Pacman pacman, int x, int y, String dir, int target, Ghost rosso) {
 
-    public Ghost(Pacman pacman, int posx, int posy, String dir, int target, Ghost rosso) {
-
-        this(pacman, posx, posy, dir, target);
+        this(pacman, x, y, dir, target);
         this.rosso = rosso;
     }
 
     public void muovi(boolean scatter) {
 
-        if (mangiato && board1.nColonna(posx) == 9 && board1.nColonna(posy) == 7) {
+        if (mangiato && Board.nColonna(position.x) == 9 && Board.nColonna(position.y) == 7) {
             mangiato = false;
         }
 
 
-        if (board1.nRiga(posy) == 9 && (board1.nColonna(posx) == 17 || board1.nColonna(posx) == 18 || board1.nColonna(posx) == 19) && dir.equals("right")) {
-            posx += spostamento;
-            if (posx > 700) {
-                posx = -30;
+        if (Board.nRiga(position.y) == 9 && (Board.nColonna(position.x) == 17 || Board.nColonna(position.x) == 18 || Board.nColonna(position.x) == 19) && dir.equals("right")) {
+            position.x += spostamento;
+            if (position.x > 700) {
+                position.x = -30;
             }
 
             return;
-        } else if (board1.nRiga(posy) == 9 && ((board1.nColonna(posx)) == -1 || board1.nColonna(posx) == 0) && dir.equals("left")) {
-            posx -= spostamento;
+        } else if (Board.nRiga(position.y) == 9 && ((Board.nColonna(position.x)) == -1 || Board.nColonna(position.x) == 0) && dir.equals("left")) {
+            position.x -= spostamento;
 
-            if (posx <= -30) {
-                posx = 36 * 19 - 2;
+            if (position.x <= -30) {
+                position.x = 36 * 19 - 2;
             }
 
             return;
         }
 
 
-        if (dir.equals("right") && board1.nColonna(this.posx) + 1 < board1.board[0].length && !board1.board[board1.nRiga(this.posy + 2)][board1.nColonna(this.posx) + 1]) {
-            this.posx += spostamento;
-        } else if (dir.equals("left") && board1.nColonna(this.posx) >= 0 && !board1.board[board1.nRiga(this.posy + 2)][board1.nColonna(this.posx)]) {
-            this.posx -= spostamento;
-        } else if (dir.equals("up") && ((!board1.board[board1.nRiga(this.posy)][board1.nColonna(this.posx + 2)]) || (board1.nRiga(this.posy) == 8 && board1.nColonna(this.posx + 2) == 9))) {
-            this.posy -= spostamento;
-        } else if (dir.equals("down") && !board1.board[board1.nRiga(this.posy) + 1][board1.nColonna(this.posx + 2)]) {
-            this.posy += spostamento;
+        if (dir.equals("right") && Board.nColonna(position.x) + 1 < Board.board[0].length && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x) + 1]) {
+            position.x += spostamento;
+        } else if (dir.equals("left") && Board.nColonna(position.x) >= 0 && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x)]) {
+            this.position.x -= spostamento;
+        } else if (dir.equals("up") && ((!Board.board[Board.nRiga(position.y)][Board.nColonna(position.x + 2)]) || (Board.nRiga(position.y) == 8 && Board.nColonna(position.x + 2) == 9))) {
+            position.y -= spostamento;
+        } else if (dir.equals("down") && !Board.board[Board.nRiga(position.y) + 1][Board.nColonna(position.x + 2)]) {
+            position.y += spostamento;
         }
 
         int nDir = 0;
         String consentite[] = new String[4];
         String dir2 = dir;
-        if (board1.nColonna(this.posx) + 1 < board1.board[0].length && !board1.board[board1.nRiga(this.posy + 2)][board1.nColonna(this.posx) + 1] && board1.checkV(this.posy) && !dir.equals("left")) {
+        if (Board.nColonna(position.x) + 1 < Board.board[0].length && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(this.position.x) + 1] && Board.checkV(position.y) && !dir.equals("left")) {
             consentite[nDir] = "right";
             dir2 = "right";
             nDir++;
             //	System.out.println(1);
 
         }// CAMBIATO ORA  34
-        if (board1.nColonna(this.posx) >= 1 && !board1.board[board1.nRiga(this.posy + 2)][board1.nColonna(this.posx) - 1] && board1.checkV(this.posy) && !dir.equals("right")) {
+        if (Board.nColonna(position.x) >= 1 && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x) - 1] && Board.checkV(position.y) && !dir.equals("right")) {
             consentite[nDir] = "left";
 
             nDir++;
@@ -88,14 +89,14 @@ public class Ghost extends JPanel {
             //	System.out.println(2);
 
         } // CAMBIATO ORA
-        if ((!board1.board[board1.nRiga(this.posy) - 1][board1.nColonna(this.posx + 2)] && board1.checkV(this.posx) && !dir.equals("down")) || (board1.nRiga(this.posy) == 9 && board1.nColonna(this.posx + 2) == 9 && board1.checkV(this.posx))) {
+        if ((!Board.board[Board.nRiga(position.y) - 1][Board.nColonna(position.x + 2)] && Board.checkV(position.x) && !dir.equals("down")) || (Board.nRiga(position.y) == 9 && Board.nColonna(position.x + 2) == 9 && Board.checkV(position.x))) {
             consentite[nDir] = "up";
             nDir++;
             dir2 = "up";
-            //			System.out.println(board1.nRiga(this.posy-2)+" "+board1.nColonna(this.posx+2));
+            //			System.out.println(Board.nRiga(position.y-2)+" "+Board.nColonna(this.position.x+2));
             //			System.out.println(3);
         }
-        if (!board1.board[board1.nRiga(this.posy) + 1][board1.nColonna(this.posx + 2)] && board1.checkV(this.posx) && !dir.equals("up")) {
+        if (!Board.board[Board.nRiga(position.y) + 1][Board.nColonna(position.x + 2)] && Board.checkV(position.x) && !dir.equals("up")) {
             consentite[nDir] = "down";
             nDir++;
             dir2 = "down";
@@ -122,9 +123,9 @@ public class Ghost extends JPanel {
                         dir = scegli(50, 754);
                     }
                 }
-                if (!(board1.nRiga(this.posy + 2) == 9 && board1.nColonna(this.posx) > 16) && !scared && !scatter) {
+                if (!(Board.nRiga(position.y + 2) == 9 && Board.nColonna(position.x) > 16) && !scared && !scatter) {
                     if (target == 0) {
-                        dir = scegli(pacman.posx, pacman.posy);
+                        dir = scegli(pacman.position.x, pacman.position.y);
                     } else if (target == 4) {
                         rosa();
                     } else if (target == 2) {
@@ -134,38 +135,37 @@ public class Ghost extends JPanel {
                     }
                 }
 
-                if (!(board1.nRiga(this.posy + 2) == 9 && board1.nColonna(this.posx) > 16) && scared && !scatter) {
+                if (!(Board.nRiga(position.y + 2) == 9 && Board.nColonna(position.x) > 16) && scared && !scatter) {
                     Random generatore = new Random();
                     dir = consentite[generatore.nextInt(nDir)];
                 }
 
             } else {
 
-                dir = scegli(iniziox, inizioy);
+                dir = scegli(startX, startY);
 
             }
         }
     }
-
     public String scegli(int posx, int posy) {
         double dist1 = 10000, dist2 = 10000, dist3 = 10000, dist4 = 10000;
         String dir2 = "right";
-        if (!board1.board[board1.nRiga(this.posy + 2)][board1.nColonna(this.posx) + 1] && !dir.equals("left")) {
-            dist1 = Math.sqrt(Math.abs(((board1.nColonna(this.posx) + 1) - board1.nColonna(posx)) * (((board1.nColonna(this.posx) + 1) - board1.nColonna(posx)))) + Math.abs(((board1.nColonna(this.posy + 2)) - board1.nColonna(posy + 2)) * (((board1.nColonna(this.posy + 2)) - board1.nColonna(posy + 2)))));
+        if (!Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x) + 1] && !dir.equals("left")) {
+            dist1 = Math.sqrt(Math.abs(((Board.nColonna(position.x) + 1) - Board.nColonna(posx)) * (((Board.nColonna(position.x) + 1) - Board.nColonna(posx)))) + Math.abs(((Board.nColonna(position.y + 2)) - Board.nColonna(posy + 2)) * (((Board.nColonna(position.y + 2)) - Board.nColonna(posy + 2)))));
         }
-        if (board1.nColonna(this.posx) >= 1 && !board1.board[board1.nRiga(this.posy + 2)][board1.nColonna(this.posx) - 1] && !dir.equals("right")) {
-            dist2 = Math.sqrt(Math.abs(((board1.nColonna(this.posx) - 1) - board1.nColonna(posx)) * (((board1.nColonna(this.posx) - 1) - board1.nColonna(posx)))) + Math.abs(((board1.nColonna(this.posy + 2)) - board1.nColonna(posy + 2)) * (((board1.nColonna(this.posy + 2)) - board1.nColonna(posy + 2)))));
-
-        }
-
-        if (!board1.board[board1.nRiga(this.posy) - 1][board1.nColonna(this.posx + 2)] && !dir.equals("down")) {
-            dist3 = Math.sqrt(Math.abs(((board1.nColonna(this.posx + 2)) - board1.nColonna(posx + 2)) * (((board1.nColonna(this.posx + 2)) - board1.nColonna(posx + 2)))) + Math.abs(((board1.nColonna(this.posy) - 1) - board1.nColonna(posy)) * (((board1.nColonna(this.posy) - 1) - board1.nColonna(posy)))));
+        if (Board.nColonna(position.x) >= 1 && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x) - 1] && !dir.equals("right")) {
+            dist2 = Math.sqrt(Math.abs(((Board.nColonna(position.x) - 1) - Board.nColonna(posx)) * (((Board.nColonna(position.x) - 1) - Board.nColonna(posx)))) + Math.abs(((Board.nColonna(position.y + 2)) - Board.nColonna(posy + 2)) * (((Board.nColonna(position.y + 2)) - Board.nColonna(posy + 2)))));
 
         }
-        if (!board1.board[board1.nRiga(this.posy) + 1][board1.nColonna(this.posx + 2)] && !dir.equals("up")) {
-            dist4 = Math.sqrt(Math.abs(((board1.nColonna(this.posx + 2)) - board1.nColonna(posx + 2)) * (((board1.nColonna(this.posx + 2)) - board1.nColonna(posx + 2)))) + Math.abs(((board1.nColonna(this.posy) + 1) - board1.nColonna(posy)) * (((board1.nColonna(this.posy) + 1) - board1.nColonna(posy)))));
 
-            //		System.out.println(board1.nRiga(this.posy)+1);
+        if (!Board.board[Board.nRiga(position.y) - 1][Board.nColonna(position.x + 2)] && !dir.equals("down")) {
+            dist3 = Math.sqrt(Math.abs(((Board.nColonna(position.x + 2)) - Board.nColonna(posx + 2)) * (((Board.nColonna(position.x + 2)) - Board.nColonna(posx + 2)))) + Math.abs(((Board.nColonna(position.y) - 1) - Board.nColonna(posy)) * (((Board.nColonna(position.y) - 1) - Board.nColonna(posy)))));
+
+        }
+        if (!Board.board[Board.nRiga(position.y) + 1][Board.nColonna(position.x + 2)] && !dir.equals("up")) {
+            dist4 = Math.sqrt(Math.abs(((Board.nColonna(position.x + 2)) - Board.nColonna(posx + 2)) * (((Board.nColonna(position.x + 2)) - Board.nColonna(posx + 2)))) + Math.abs(((Board.nColonna(position.y) + 1) - Board.nColonna(posy)) * (((Board.nColonna(position.y) + 1) - Board.nColonna(posy)))));
+
+            //		System.out.println(Board.nRiga(this.posy)+1);
         }
         // System.out.println(dir + " " + dist1 + " " + dist3);
         if (dist1 <= dist2 && dist1 <= dist3 && dist1 <= dist4) {
@@ -188,40 +188,40 @@ public class Ghost extends JPanel {
 
     public void rosa() {
 
-        if (pacman.dir.equals("up")) {
+        if (pacman.direction == Direction.up) {
 
-            if (pacman.posy >= 144 && pacman.posx >= 144) {
-                dir = scegli(pacman.posx - 144, pacman.posy - 144);
-            } else if (pacman.posy >= 144 && pacman.posx < 144) {
-                dir = scegli(0, pacman.posy - 144);
-            } else if (pacman.posy < 144 && pacman.posx < 144) {
+            if (pacman.position.y >= 144 && pacman.position.x >= 144) {
+                dir = scegli(pacman.position.x - 144, pacman.position.y - 144);
+            } else if (pacman.position.y >= 144 && pacman.position.x < 144) {
+                dir = scegli(0, pacman.position.y - 144);
+            } else if (pacman.position.y < 144 && pacman.position.x < 144) {
                 dir = scegli(0, 0);
-            } else if (pacman.posy < 144 && pacman.posx >= 144) {
-                dir = scegli(pacman.posx - 144, 0);
+            } else if (pacman.position.y < 144 && pacman.position.x >= 144) {
+                dir = scegli(pacman.position.x - 144, 0);
             }
-        } else if (pacman.dir.equals("down")) {
+        } else if (pacman.direction == Direction.down) {
 
-            if (pacman.posy < 612) {
-                dir = scegli(pacman.posx, pacman.posy + 144);
+            if (pacman.position.y < 612) {
+                dir = scegli(pacman.position.x, pacman.position.y + 144);
             } else {
-                dir = scegli(pacman.posx, 754);
+                dir = scegli(pacman.position.x, 754);
             }
-        } else if (pacman.dir.equals("right")) {
+        } else if (pacman.direction == Direction.right) {
 
-            if (pacman.posx < 540) {
-                dir = scegli(pacman.posx + 144, pacman.posy);
+            if (pacman.position.x < 540) {
+                dir = scegli(pacman.position.x + 144, pacman.position.y);
             } else {
-                dir = scegli(682, pacman.posy);
+                dir = scegli(682, pacman.position.y);
             }
-        } else if (pacman.dir.equals("left")) {
+        } else if (pacman.direction == Direction.left) {
 
-            if (pacman.posx >= 144) {
-                dir = scegli(pacman.posx - 144, pacman.posy);
+            if (pacman.position.x >= 144) {
+                dir = scegli(pacman.position.x - 144, pacman.position.y);
             } else {
-                dir = scegli(0, pacman.posy);
+                dir = scegli(0, pacman.position.y);
             }
         } else {
-            dir = scegli(pacman.posx, pacman.posy);
+            dir = scegli(pacman.position.x, pacman.position.y);
         }
 
 
@@ -232,56 +232,56 @@ public class Ghost extends JPanel {
 
         int x = 0, y = 0;
 
-        if (pacman.dir.equals("up")) {
+        if (pacman.direction == Direction.up) {
 
-            if (pacman.posy >= 72 && pacman.posx >= 72) {
-                y = pacman.posx - 72;
-                x = pacman.posx - 72;
-            } else if (pacman.posy >= 72 && pacman.posx < 72) {
+            if (pacman.position.y >= 72 && pacman.position.x >= 72) {
+                y = pacman.position.x - 72;
+                x = pacman.position.x - 72;
+            } else if (pacman.position.y >= 72 && pacman.position.x < 72) {
                 x = 0;
-                y = pacman.posy - 72;
-            } else if (pacman.posy < 72 && pacman.posx < 72) {
+                y = pacman.position.y - 72;
+            } else if (pacman.position.y < 72 && pacman.position.x < 72) {
                 x = 0;
                 y = 0;
-            } else if (pacman.posy < 72 && pacman.posx >= 72) {
-                x = pacman.posx - 72;
+            } else if (pacman.position.y < 72 && pacman.position.x >= 72) {
+                x = pacman.position.x - 72;
                 y = 0;
             }
-        } else if (pacman.dir.equals("down")) {
+        } else if (pacman.direction == Direction.down) {
 
-            if (pacman.posy < 684) {
-                x = pacman.posx;
-                y = pacman.posy - 72;
+            if (pacman.position.y < 684) {
+                x = pacman.position.x;
+                y = pacman.position.y - 72;
             } else {
-                x = pacman.posx;
-                y = pacman.posy - 754;
+                x = pacman.position.x;
+                y = pacman.position.y - 754;
             }
 
-        } else if (pacman.dir.equals("right")) {
+        } else if (pacman.direction == Direction.right) {
 
-            if (pacman.posx < 612) {
-                x = pacman.posx + 72;
-                y = pacman.posy;
+            if (pacman.position.x < 612) {
+                x = pacman.position.x + 72;
+                y = pacman.position.y;
             } else {
                 x = 682;
-                y = pacman.posy;
+                y = pacman.position.y;
             }
-        } else if (pacman.dir.equals("left")) {
+        } else if (pacman.direction == Direction.left) {
 
-            if (pacman.posx >= 72) {
-                y = pacman.posx - 72;
-                y = pacman.posy;
+            if (pacman.position.x >= 72) {
+                y = pacman.position.x - 72;
+                y = pacman.position.y;
             } else {
                 x = 0;
-                y = pacman.posy;
+                y = pacman.position.y;
             }
         } else {
-            x = pacman.posx;
-            y = pacman.posy;
+            x = pacman.position.x;
+            y = pacman.position.y;
         }
 
-        x = x + (x - rosso.posx);
-        y = y + (y - rosso.posy);
+        x = x + (x - rosso.position.x);
+        y = y + (y - rosso.position.x);
 
         if (x > 754) {
             x = 754;
@@ -301,9 +301,9 @@ public class Ghost extends JPanel {
 
     public void arancione() {
 
-        double dist = Math.sqrt((posx - pacman.posx) * (posx - pacman.posx) + (posy - pacman.posy) * (posy - pacman.posy));
+        double dist = Math.sqrt((position.x - pacman.position.x) * (position.x - pacman.position.x) + (position.y - pacman.position.y) * (position.y - pacman.position.y));
         if (dist > 36 * target) {
-            dir = scegli(pacman.posx, pacman.posy);
+            dir = scegli(pacman.position.x, pacman.position.y);
         } else {
             dir = scegli(50, 754);
         }
@@ -329,11 +329,11 @@ public class Ghost extends JPanel {
 
     public void norm() {
         this.scared = false;
-        if (posx % 2 != 0) {
-            posx++;
+        if (position.x % 2 != 0) {
+            position.x++;
         }
-        if (posy % 2 != 0) {
-            posy++;
+        if (position.y % 2 != 0) {
+            position.y++;
         }
 
         spostamento = 2;
@@ -343,8 +343,8 @@ public class Ghost extends JPanel {
     public void mangiato() {
 
         norm();
-        this.posx = iniziox;
-        this.posy = inizioy;
+        position.x = startX;
+        position.y = startY;
         this.dir = iniziodir;
         this.mangiato = false;
 

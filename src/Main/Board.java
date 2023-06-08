@@ -18,7 +18,7 @@ public class Board extends KeyAdapter implements ActionListener  {
 
     public final BoardUI boardUI;
 
-    private final boolean[][] board = {
+    public static final boolean[][] board = {
             {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true},
             {true, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, true},
             {true, false, true, true, false, true, true, true, false, true, false, true, true, true, false, true, true, false, true},
@@ -67,18 +67,18 @@ public class Board extends KeyAdapter implements ActionListener  {
     @Override
     public void keyPressed(KeyEvent e) {
 
-        // TODO: 08/06/2023 maybe directly inside pacman
-        if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
-            pacman.dir = "up";
-        } else if (e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_DOWN) {
-            pacman.dir = "down";
-        } else if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
-            pacman.dir = "left";
-        } else if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            pacman.dir = "right";
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+
+            // TODO: 08/06/2023 what if win
+
+
+        }
+        else {
+            pacman.setDirection(e.getKeyCode());
         }
 
-        // TODO: 08/06/2023 what if win
+
+
 
     }
 
@@ -99,7 +99,7 @@ public class Board extends KeyAdapter implements ActionListener  {
             }
 // TODO: 08/06/2023 mela
            // checkMela();
-            cookies.mangia(pacman.posx, pacman.posy);
+            cookies.mangia(pacman.position.x, pacman.position.y);
 
             if (milliSeconds <= 5000) {
                 redGhost.muovi(true);
@@ -118,11 +118,11 @@ public class Board extends KeyAdapter implements ActionListener  {
             }
 
 
-            Rectangle pacmanR = new Rectangle(pacman.posx + 10, pacman.posy + 10, 10, 10);
-            Rectangle rossoR = new Rectangle(redGhost.posx + 10, redGhost.posy + 10, 10, 10);
-            Rectangle rosaR = new Rectangle(pinkGhost.posx + 10, pinkGhost.posy + 10, 10, 10);
-            Rectangle blueR = new Rectangle(blueGhost.posx + 10, blueGhost.posy + 10, 10, 10);
-            Rectangle arancioneR = new Rectangle(orangeGhost.posx + 10, orangeGhost.posy + 10, 10, 10);
+            Rectangle pacmanR = new Rectangle(pacman.position.x + 10, pacman.position.y + 10, 10, 10);
+            Rectangle rossoR = new Rectangle(redGhost.position.x + 10, redGhost.position.y + 10, 10, 10);
+            Rectangle rosaR = new Rectangle(pinkGhost.position.x + 10, pinkGhost.position.y + 10, 10, 10);
+            Rectangle blueR = new Rectangle(blueGhost.position.x + 10, blueGhost.position.y + 10, 10, 10);
+            Rectangle arancioneR = new Rectangle(orangeGhost.position.x + 10, orangeGhost.position.y + 10, 10, 10);
 
             if ((!redGhost.scared && pacmanR.intersects(rossoR) && !redGhost.mangiato) || (!pinkGhost.scared && pacmanR.intersects(rosaR) && !pinkGhost.mangiato) || (!blueGhost.scared && pacmanR.intersects(blueR) && !blueGhost.mangiato) || (!orangeGhost.scared && pacmanR.intersects(arancioneR) && orangeGhost.mangiato)) {
                 timer.stop();
@@ -183,4 +183,31 @@ public class Board extends KeyAdapter implements ActionListener  {
 
 
     }
+
+
+
+    public static int nColonna(int posx) {
+        return (int) posx / 36;
+    }
+
+    public static int nRiga(int posy) {
+        return (int) posy / 36;
+    }
+
+    public static boolean checkV(int posx) {
+        boolean angolo = false;
+        if (posx % 36 == 0) {
+            angolo = true;
+        }
+        return angolo;
+    }
+
+    public static boolean checkO(int posy) {
+        boolean angolo = false;
+        if (posy % 36 == 0) {
+            angolo = true;
+        }
+        return angolo;
+    }
+
 }

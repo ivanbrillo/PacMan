@@ -42,8 +42,8 @@ public class Cookies extends JPanel {
     }
 
     public void mappaPalline() {
-        for (int i = 0; i < board1.R; i++) {
-            for (int j = 0; j < board1.C; j++) {
+        for (int i = 0; i < 21; i++) {
+            for (int j = 0; j < 19; j++) {
                 if (!m[i][j]) {
                     mPos[index][0] = 36 * j + 12;
                     mPos[index][1] = 36 * i + 12;

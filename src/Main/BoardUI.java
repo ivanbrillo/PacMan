@@ -37,12 +37,13 @@ public class BoardUI extends JPanel {
         setOpaque(false);
         g.drawImage(background, 0, 0, null);
 
+
         pacman.draw(g);
-//        redGhost.paintComponents(g);
-//        blueGhost.paintComponents(g);
-//        orangeGhost.paintComponents(g);
-//        pinkGhost.paintComponents(g);
-//        balls.paintComponents(g);
+        redGhost.draw(g);
+        blueGhost.draw(g);
+        orangeGhost.draw(g);
+        pinkGhost.draw(g);
+//        balls.draw(g);
 
     }
 
