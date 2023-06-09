@@ -3,20 +3,20 @@ package Contenitore.Main;
 import java.awt.*;
 import java.util.Random;
 
-public class Ghost extends ComponentUI {
+public abstract class Ghost extends ComponentUI {
 //    public int position.x, position.y;
     private int startX, startY;
-    private String dir;
-    String iniziodir;
-    private Pacman pacman;
-    private Ghost rosso;
+    protected String dir;
+    String startDir;
+    protected Pacman pacman;
+    protected Ghost rosso;
     private int target;
     public boolean scared = false;
     boolean mangiato = false;
 
-    public Ghost(Pacman pacman, int x, int y, String dir, int target) {
+    public Ghost(Pacman pacman, int x, int y, String dir, String name) {
 
-        super("pinkGhost", new Point(x, y));
+        super(name, new Point(x, y));
 
         this.pacman = pacman;
         this.startX = x;
@@ -24,19 +24,26 @@ public class Ghost extends ComponentUI {
 //        this.position.x = position.x; //326;
 //        position.y = position.y; //252;
         this.dir = dir;
-        this.iniziodir = dir;
+        this.startDir = dir;
         this.target = target;
         rosso = this;
     }
 
 
-    public Ghost(Pacman pacman, int x, int y, String dir, int target, Ghost rosso) {
+    public Ghost(Pacman pacman, int x, int y, String dir, Ghost rosso, String name) {
 
-        this(pacman, x, y, dir, target);
+        this(pacman, x, y, dir, name);
         this.rosso = rosso;
     }
 
-    public void muovi(boolean scatter) {
+
+    public abstract void movement(boolean scattered);
+
+
+        /**
+         * @return true if there is a decision to take on which direction
+         */
+    public boolean move(boolean scatter) {
 
         if (mangiato && Board.nColonna(position.x) == 9 && Board.nColonna(position.y) == 7) {
             mangiato = false;
@@ -49,15 +56,14 @@ public class Ghost extends ComponentUI {
                 position.x = -30;
             }
 
-            return;
+            return false;
         } else if (Board.nRiga(position.y) == 9 && ((Board.nColonna(position.x)) == -1 || Board.nColonna(position.x) == 0) && dir.equals("left")) {
             position.x -= spostamento;
 
             if (position.x <= -30) {
                 position.x = 36 * 19 - 2;
             }
-
-            return;
+            return false;
         }
 
 
@@ -110,29 +116,23 @@ public class Ghost extends ComponentUI {
             if (!mangiato) {
 
                 if (scatter && !scared) {
-                    if (target == 4) {
-                        dir = scegli(80, 0);
-                        return;
-                    } else if (target == 0) {
-                        dir = scegli(604, 0);
-                        return;
-                    } else if (target == 2) {
-                        dir = scegli(680, 754);
-                        return;
-                    } else if (target == 8) {
-                        dir = scegli(50, 754);
-                    }
+
+                    return true;
+//                    if (target == 4) {
+//                        dir = updateDirection(80, 0);
+//                        return;
+//                    } else if (target == 0) {
+//                        dir = updateDirection(604, 0);
+//                        return;
+//                    } else if (target == 2) {
+//                        dir = updateDirection(680, 754);
+//                        return;
+//                    } else if (target == 8) {
+//                        dir = updateDirection(50, 754);
+//                    }
                 }
                 if (!(Board.nRiga(position.y + 2) == 9 && Board.nColonna(position.x) > 16) && !scared && !scatter) {
-                    if (target == 0) {
-                        dir = scegli(pacman.position.x, pacman.position.y);
-                    } else if (target == 4) {
-                        rosa();
-                    } else if (target == 2) {
-                        blue();
-                    } else if (target == 8) {
-                        arancione();
-                    }
+                   return true;
                 }
 
                 if (!(Board.nRiga(position.y + 2) == 9 && Board.nColonna(position.x) > 16) && scared && !scatter) {
@@ -141,13 +141,14 @@ public class Ghost extends ComponentUI {
                 }
 
             } else {
-
-                dir = scegli(startX, startY);
-
+                dir = updateDirection(startX, startY);
             }
+
         }
+        return false;
     }
-    public String scegli(int posx, int posy) {
+
+    public String updateDirection(int posx, int posy) {
         double dist1 = 10000, dist2 = 10000, dist3 = 10000, dist4 = 10000;
         String dir2 = "right";
         if (!Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x) + 1] && !dir.equals("left")) {
@@ -186,129 +187,129 @@ public class Ghost extends ComponentUI {
 
     }
 
-    public void rosa() {
+//    public void rosa() {
+//
+//        if (pacman.direction == Direction.up) {
+//
+//            if (pacman.position.y >= 144 && pacman.position.x >= 144) {
+//                dir = updateDirection(pacman.position.x - 144, pacman.position.y - 144);
+//            } else if (pacman.position.y >= 144 && pacman.position.x < 144) {
+//                dir = updateDirection(0, pacman.position.y - 144);
+//            } else if (pacman.position.y < 144 && pacman.position.x < 144) {
+//                dir = updateDirection(0, 0);
+//            } else if (pacman.position.y < 144 && pacman.position.x >= 144) {
+//                dir = updateDirection(pacman.position.x - 144, 0);
+//            }
+//        } else if (pacman.direction == Direction.down) {
+//
+//            if (pacman.position.y < 612) {
+//                dir = updateDirection(pacman.position.x, pacman.position.y + 144);
+//            } else {
+//                dir = updateDirection(pacman.position.x, 754);
+//            }
+//        } else if (pacman.direction == Direction.right) {
+//
+//            if (pacman.position.x < 540) {
+//                dir = updateDirection(pacman.position.x + 144, pacman.position.y);
+//            } else {
+//                dir = updateDirection(682, pacman.position.y);
+//            }
+//        } else if (pacman.direction == Direction.left) {
+//
+//            if (pacman.position.x >= 144) {
+//                dir = updateDirection(pacman.position.x - 144, pacman.position.y);
+//            } else {
+//                dir = updateDirection(0, pacman.position.y);
+//            }
+//        } else {
+//            dir = updateDirection(pacman.position.x, pacman.position.y);
+//        }
+//
+//
+//    }
 
-        if (pacman.direction == Direction.up) {
 
-            if (pacman.position.y >= 144 && pacman.position.x >= 144) {
-                dir = scegli(pacman.position.x - 144, pacman.position.y - 144);
-            } else if (pacman.position.y >= 144 && pacman.position.x < 144) {
-                dir = scegli(0, pacman.position.y - 144);
-            } else if (pacman.position.y < 144 && pacman.position.x < 144) {
-                dir = scegli(0, 0);
-            } else if (pacman.position.y < 144 && pacman.position.x >= 144) {
-                dir = scegli(pacman.position.x - 144, 0);
-            }
-        } else if (pacman.direction == Direction.down) {
+//    public void blue() {
+//
+//        int x = 0, y = 0;
+//
+//        if (pacman.direction == Direction.up) {
+//
+//            if (pacman.position.y >= 72 && pacman.position.x >= 72) {
+//                y = pacman.position.x - 72;
+//                x = pacman.position.x - 72;
+//            } else if (pacman.position.y >= 72 && pacman.position.x < 72) {
+//                x = 0;
+//                y = pacman.position.y - 72;
+//            } else if (pacman.position.y < 72 && pacman.position.x < 72) {
+//                x = 0;
+//                y = 0;
+//            } else if (pacman.position.y < 72 && pacman.position.x >= 72) {
+//                x = pacman.position.x - 72;
+//                y = 0;
+//            }
+//        } else if (pacman.direction == Direction.down) {
+//
+//            if (pacman.position.y < 684) {
+//                x = pacman.position.x;
+//                y = pacman.position.y - 72;
+//            } else {
+//                x = pacman.position.x;
+//                y = pacman.position.y - 754;
+//            }
+//
+//        } else if (pacman.direction == Direction.right) {
+//
+//            if (pacman.position.x < 612) {
+//                x = pacman.position.x + 72;
+//                y = pacman.position.y;
+//            } else {
+//                x = 682;
+//                y = pacman.position.y;
+//            }
+//        } else if (pacman.direction == Direction.left) {
+//
+//            if (pacman.position.x >= 72) {
+//                y = pacman.position.x - 72;
+//                y = pacman.position.y;
+//            } else {
+//                x = 0;
+//                y = pacman.position.y;
+//            }
+//        } else {
+//            x = pacman.position.x;
+//            y = pacman.position.y;
+//        }
+//
+//        x = x + (x - rosso.position.x);
+//        y = y + (y - rosso.position.x);
+//
+//        if (x > 754) {
+//            x = 754;
+//        }
+//        if (x < 0) {
+//            x = 0;
+//        }
+//        if (y > 684) {
+//            y = 684;
+//        }
+//        if (y < 0) {
+//            y = 0;
+//        }
+//        dir = updateDirection(x, y);
+//
+//    }
 
-            if (pacman.position.y < 612) {
-                dir = scegli(pacman.position.x, pacman.position.y + 144);
-            } else {
-                dir = scegli(pacman.position.x, 754);
-            }
-        } else if (pacman.direction == Direction.right) {
-
-            if (pacman.position.x < 540) {
-                dir = scegli(pacman.position.x + 144, pacman.position.y);
-            } else {
-                dir = scegli(682, pacman.position.y);
-            }
-        } else if (pacman.direction == Direction.left) {
-
-            if (pacman.position.x >= 144) {
-                dir = scegli(pacman.position.x - 144, pacman.position.y);
-            } else {
-                dir = scegli(0, pacman.position.y);
-            }
-        } else {
-            dir = scegli(pacman.position.x, pacman.position.y);
-        }
-
-
-    }
-
-
-    public void blue() {
-
-        int x = 0, y = 0;
-
-        if (pacman.direction == Direction.up) {
-
-            if (pacman.position.y >= 72 && pacman.position.x >= 72) {
-                y = pacman.position.x - 72;
-                x = pacman.position.x - 72;
-            } else if (pacman.position.y >= 72 && pacman.position.x < 72) {
-                x = 0;
-                y = pacman.position.y - 72;
-            } else if (pacman.position.y < 72 && pacman.position.x < 72) {
-                x = 0;
-                y = 0;
-            } else if (pacman.position.y < 72 && pacman.position.x >= 72) {
-                x = pacman.position.x - 72;
-                y = 0;
-            }
-        } else if (pacman.direction == Direction.down) {
-
-            if (pacman.position.y < 684) {
-                x = pacman.position.x;
-                y = pacman.position.y - 72;
-            } else {
-                x = pacman.position.x;
-                y = pacman.position.y - 754;
-            }
-
-        } else if (pacman.direction == Direction.right) {
-
-            if (pacman.position.x < 612) {
-                x = pacman.position.x + 72;
-                y = pacman.position.y;
-            } else {
-                x = 682;
-                y = pacman.position.y;
-            }
-        } else if (pacman.direction == Direction.left) {
-
-            if (pacman.position.x >= 72) {
-                y = pacman.position.x - 72;
-                y = pacman.position.y;
-            } else {
-                x = 0;
-                y = pacman.position.y;
-            }
-        } else {
-            x = pacman.position.x;
-            y = pacman.position.y;
-        }
-
-        x = x + (x - rosso.position.x);
-        y = y + (y - rosso.position.x);
-
-        if (x > 754) {
-            x = 754;
-        }
-        if (x < 0) {
-            x = 0;
-        }
-        if (y > 684) {
-            y = 684;
-        }
-        if (y < 0) {
-            y = 0;
-        }
-        dir = scegli(x, y);
-
-    }
-
-    public void arancione() {
-
-        double dist = Math.sqrt((position.x - pacman.position.x) * (position.x - pacman.position.x) + (position.y - pacman.position.y) * (position.y - pacman.position.y));
-        if (dist > 36 * target) {
-            dir = scegli(pacman.position.x, pacman.position.y);
-        } else {
-            dir = scegli(50, 754);
-        }
-
-    }
+//    public void arancione() {
+//
+//        double dist = Math.sqrt((position.x - pacman.position.x) * (position.x - pacman.position.x) + (position.y - pacman.position.y) * (position.y - pacman.position.y));
+//        if (dist > 36 * target) {
+//            dir = updateDirection(pacman.position.x, pacman.position.y);
+//        } else {
+//            dir = updateDirection(50, 754);
+//        }
+//
+//    }
 
 
     public void scared(boolean scared) {
@@ -345,7 +346,7 @@ public class Ghost extends ComponentUI {
         norm();
         position.x = startX;
         position.y = startY;
-        this.dir = iniziodir;
+        this.dir = startDir;
         this.mangiato = false;
 
 

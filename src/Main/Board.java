@@ -48,10 +48,10 @@ public class Board extends KeyAdapter implements ActionListener  {
         pacman = new Pacman();
         cookies = new Cookies();
         // TODO: 08/06/2023 ghosts behavioural patter
-        redGhost = new Ghost(pacman, 326, 252, "right", 0);
-        pinkGhost = new Ghost(pacman, 326, 324, "up", 4);
-        blueGhost = new Ghost(pacman, 290, 324, "right", 2, redGhost);
-        orangeGhost = new Ghost(pacman, 358, 324, "left", 8, redGhost);
+        redGhost = new RedGhost(pacman, 326, 252, "right" );
+        pinkGhost = new PinkGhost(pacman, 326, 324, "up");
+        blueGhost = new BlueGhost(pacman, 290, 324, "right", redGhost);
+        orangeGhost = new OrangeGhost(pacman, 358, 324, "left", redGhost);
         boardUI = new BoardUI(pacman, redGhost, pinkGhost, orangeGhost, blueGhost, cookies);
 
         timer.start();
@@ -77,9 +77,6 @@ public class Board extends KeyAdapter implements ActionListener  {
             pacman.setDirection(e.getKeyCode());
         }
 
-
-
-
     }
 
 
@@ -102,17 +99,17 @@ public class Board extends KeyAdapter implements ActionListener  {
             cookies.mangia(pacman.position.x, pacman.position.y);
 
             if (milliSeconds <= 5000) {
-                redGhost.muovi(true);
-                pinkGhost.muovi(true);
-                blueGhost.muovi(true);
+                redGhost.movement(true);
+                pinkGhost.movement(true);
+                blueGhost.movement(true);
 //              arancione.muovi(true);
             } else {
-                redGhost.muovi(false);
-                pinkGhost.muovi(false);
-                blueGhost.muovi(false);
+                redGhost.movement(false);
+                pinkGhost.movement(false);
+                blueGhost.movement(false);
 
                 if (cookies.startArancione) {
-                    orangeGhost.muovi(false);
+                    orangeGhost.movement(false);
                 }
 
             }
@@ -160,16 +157,16 @@ public class Board extends KeyAdapter implements ActionListener  {
             }
         } else {
             if (redGhost.mangiato) {
-                redGhost.muovi(false);
+                redGhost.movement(false);
             }
             if (blueGhost.mangiato) {
-                blueGhost.muovi(false);
+                blueGhost.movement(false);
             }
             if (orangeGhost.mangiato) {
-                orangeGhost.muovi(false);
+                orangeGhost.movement(false);
             }
             if (pinkGhost.mangiato) {
-                pinkGhost.muovi(false);
+                pinkGhost.movement(false);
             }
         }
 
