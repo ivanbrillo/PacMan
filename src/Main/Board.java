@@ -14,8 +14,6 @@ public class Board extends KeyAdapter implements ActionListener  {
     private int milliSeconds = 0;
     private int millisecondsApple = 0;
     boolean game = true;
-
-
     public final BoardUI boardUI;
 
     public static final boolean[][] board = {
@@ -47,7 +45,7 @@ public class Board extends KeyAdapter implements ActionListener  {
 
         pacman = new Pacman();
         cookies = new Cookies();
-        // TODO: 08/06/2023 ghosts behavioural patter
+        // TODO: 08/06/2023 ghosts behavioral patter
         redGhost = new RedGhost(pacman, 326, 252, "right" );
         pinkGhost = new PinkGhost(pacman, 326, 324, "up");
         blueGhost = new BlueGhost(pacman, 290, 324, "right", redGhost);
@@ -96,7 +94,7 @@ public class Board extends KeyAdapter implements ActionListener  {
             }
 // TODO: 08/06/2023 mela
            // checkMela();
-            cookies.mangia(pacman.position.x, pacman.position.y);
+            cookies.eatCookies(pacman.position.x, pacman.position.y);
 
             if (milliSeconds <= 5000) {
                 redGhost.movement(true);
@@ -170,7 +168,7 @@ public class Board extends KeyAdapter implements ActionListener  {
             }
         }
 
-        if (cookies.vinto) {
+        if (cookies.win) {
             timer.stop();
             game = false;
         }

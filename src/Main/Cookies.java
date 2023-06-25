@@ -1,109 +1,104 @@
 package Contenitore.Main;
 
 import javax.swing.*;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Cookies extends JPanel {
-    public int mPos[][];
-    public boolean p[];
-    int numero = 0;
+    private final boolean[][] cookies = new boolean[21][19];
+
     public boolean startArancione = false;
-    public boolean vinto = false;
-    boolean m[][] = {
+    public boolean win = false;
+    Map<int[], Boolean> cookiesMap = new HashMap<>();
+    private final int totalCookies;
+    private int eatenCookies = 0;
 
-            {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true},
-            {true, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, true},
-            {true, false, true, true, false, true, true, true, false, true, false, true, true, true, false, true, true, false, true},
-            {true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true},
-            {true, false, true, true, false, true, false, true, true, true, true, true, false, true, false, true, true, false, true},
-            {true, false, false, false, false, true, false, false, false, true, false, false, false, true, false, false, false, false, true},
-            {true, true, true, true, false, true, true, true, false, true, false, true, true, true, false, true, true, true, true},
-            {true, true, true, true, false, true, false, false, false, false, false, false, false, true, false, true, true, true, true},
-            {true, true, true, true, false, true, false, true, true, true, true, true, false, true, false, true, true, true, true},
-            {false, false, false, false, false, false, false, true, true, true, true, true, false, false, false, false, false, false, false},
-            {true, true, true, true, false, true, false, true, true, true, true, true, false, true, false, true, true, true, true},
-            {true, true, true, true, false, true, false, false, false, false, false, false, false, true, false, true, true, true, true},
-            {true, true, true, true, false, true, false, true, true, true, true, true, false, true, false, true, true, true, true},
-            {true, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, true},
-            {true, false, true, true, false, true, true, true, false, true, false, true, true, true, false, true, true, false, true},
-            {true, false, false, true, false, false, false, false, false, false, false, false, false, false, false, true, false, false, true},
-            {true, true, false, true, false, true, false, true, true, true, true, true, false, true, false, true, false, true, true},
-            {true, false, false, false, false, true, false, false, false, true, false, false, false, true, false, false, false, false, true},
-            {true, false, true, true, true, true, true, true, false, true, false, true, true, true, true, true, true, false, true},
-            {true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true},
-            {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}
-
-    };
-    public int index = 0;
 
     public Cookies() {
-        mPos = new int[(19 * 21 * 5)][2];
-        p = new boolean[(19 * 21 * 5)];
+
+        for (int i = 0; i < Board.board.length; i++) {
+            cookies[i] = new boolean[Board.board[0].length];
+            System.arraycopy(Board.board[i], 0, cookies[i], 0, Board.board[i].length);
+        }
+
+        cookies[9][9] = true;   // ghost home, without cookie
         mappaPalline();
+        totalCookies = cookiesMap.size();
+
     }
 
-    public void mappaPalline() {
-        for (int i = 0; i < 21; i++) {
-            for (int j = 0; j < 19; j++) {
-                if (!m[i][j]) {
-                    mPos[index][0] = 36 * j + 12;
-                    mPos[index][1] = 36 * i + 12;
-                    p[index] = true;
-                    m[i][j] = true;
-                    index++;
-                    check(i, j);
-
+    private void mappaPalline() {
+        for (int i = 0; i < 21; i++)
+            for (int j = 0; j < 19; j++)
+                if (!cookies[i][j]) {
+                    cookies[i][j] = true;
+                    addCookies(i, j);
                 }
-            }
-        }
+    }
+
+
+    public void addCookies(int i, int j) {
+
+        //center
+        cookiesMap.put(new int[]{36 * j + 12, 36 * i + 12}, true);
+
+        // above
+        if (!cookies[i - 1][j])
+            cookiesMap.put(new int[]{36 * j + 12, 36 * i}, true);
+
+        // under
+        if (!cookies[i + 1][j])
+            cookiesMap.put(new int[]{36 * j + 12, 36 * i + 30}, true);
+
+        // right
+        if ((j + 1) <= 18 && !cookies[i][j + 1])
+            cookiesMap.put(new int[]{36 * j + 30, 36 * i + 12}, true);
+
+        // left
+        if (j - 1 >= 0 && !cookies[i][j - 1])
+            cookiesMap.put(new int[]{36 * j, 36 * i + 12}, true);
 
     }
 
-    public void check(int i, int j) {
-        // check sopra
-        if (m[i - 1][j] == false) {
-            mPos[index][0] = 36 * j + 12;
-            mPos[index][1] = 36 * i;
-            p[index] = true;
-            index++;
-        }
-        // check sotto
-        if (m[i + 1][j] == false) {
-            mPos[index][0] = 36 * j + 12;
-            mPos[index][1] = 36 * i + 30;
-            p[index] = true;
-            index++;
-        }
-        // check dx
-        if ((j + 1) <= 18 && m[i][j + 1] == false) {
-            mPos[index][0] = 36 * j + 30;
-            mPos[index][1] = 36 * i + 12;
-            p[index] = true;
-            index++;
-        }
-        if (j - 1 >= 0 && m[i][j - 1] == false) {
-            mPos[index][0] = 36 * j;
-            mPos[index][1] = 36 * i + 12;
-            p[index] = true;
-            index++;
-        }
+    public void eatCookies(int posx, int posy) {
 
-    }
+        for (Map.Entry<int[], Boolean> entry : cookiesMap.entrySet()) {
 
-    public void mangia(int posx, int posy) {
-        for (int i = 0; i <= index; i++) {
-            if (p[i] && ((posx + 8) <= (mPos[i][0]) && (posx + 20) >= (mPos[i][0])) && ((posy + 5) <= (mPos[i][1]) && (posy + 20) >= (mPos[i][1]))) {
-                p[i] = false;
-                numero++;
+            int[] position = entry.getKey();
+            boolean notEaten = entry.getValue();
+
+            if ( notEaten && ((posx + 8) <= (position[0]) && (posx + 20) >= (position[0])) && ((posy + 5) <= (position[1]) && (posy + 20) >= (position[1]))) {
+                cookiesMap.replace(position, false);
+                eatenCookies++;
             }
         }
-        if (numero == (int) index / 3) {
+
+
+        if (eatenCookies == totalCookies / 3) {
             startArancione = true;
         }
 
-        if (numero >= index) {
-            vinto = true;
+        if (eatenCookies == totalCookies) {
+            win = true;
         }
 
+    }
+
+
+    public void draw(Graphics g) {
+
+        g.setColor(Color.YELLOW);
+
+        for (Map.Entry<int[], Boolean> entry : cookiesMap.entrySet()) {
+
+            int[] position = entry.getKey();
+            boolean notEaten = entry.getValue();
+
+            if(notEaten)
+                g.fillOval((position[0] + 1), (position[1] + 1), 8, 8);
+
+        }
     }
 
 }
