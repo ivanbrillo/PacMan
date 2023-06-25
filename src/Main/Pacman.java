@@ -8,14 +8,8 @@ import java.awt.event.KeyEvent;
 
 public class Pacman extends ComponentUI {
 
-//    int colonna = 36;
-//    int riga = 36;
-//    public int position.x = (colonna) * 9;
-//    public int position.y = riga * 15;
-//    public String dir = "";
     private Direction dirTrans = Direction.not_moving;
-//    Image pacman1 = Toolkit.getDefaultToolkit().createImage("./src/images" + "\\pacman1.png");
-
+    private String oldImage = "pacman1";
 
     public Pacman() {
 
@@ -23,7 +17,7 @@ public class Pacman extends ComponentUI {
 
     }
 
-    
+
     public void muovi() {
 
 
@@ -81,11 +75,20 @@ public class Pacman extends ComponentUI {
 
         long currentTimeMillis = System.currentTimeMillis();
 
+
+
+        String name;
+
         if(dirTrans == null)
-            setImage("pacman1");
-        else if (currentTimeMillis  % 300 > 140)
-            setImage("pacman"+(dirTrans.ordinal()+1));      //because enum ints start from 0
-        else setImage("pacmanFull");
+            name = "pacman1";
+        else if (currentTimeMillis  % 400 > 190)
+            name = "pacman"+(dirTrans.ordinal()+1);      //because enum ints start from 0
+        else
+            name = "pacmanFull";
+
+        if(!oldImage.equals(name))
+            setImage(name);
+        oldImage = name;
 
     }
 
