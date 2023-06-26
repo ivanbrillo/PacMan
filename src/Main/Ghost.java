@@ -1,12 +1,13 @@
 package Contenitore.Main;
 
 import java.awt.*;
-import java.util.Random;
+import java.util.*;
 
 public abstract class Ghost extends ComponentUI {
-    private int startX, startY;
-    protected String dir;
-    String startDir;
+
+    private Point start;
+    protected Direction dir;
+    private Direction startDir;
     protected Pacman pacman;
     protected Ghost rosso;
     public boolean scared = false;
@@ -14,14 +15,13 @@ public abstract class Ghost extends ComponentUI {
     private final String ghostName;
     protected Point scatteredPoint;
 
-    public Ghost(Pacman pacman, int x, int y, String dir, String name) {
+    public Ghost(Pacman pacman, int x, int y, Direction dir, String name) {
 
         super(name, new Point(x, y));
         ghostName = name;
 
         this.pacman = pacman;
-        this.startX = x;
-        this.startY = y;
+        start = new Point(x, y);
 
         this.dir = dir;
         this.startDir = dir;
@@ -29,7 +29,7 @@ public abstract class Ghost extends ComponentUI {
     }
 
 
-    public Ghost(Pacman pacman, int x, int y, String dir, Ghost rosso, String name) {
+    public Ghost(Pacman pacman, int x, int y, Direction dir, Ghost rosso, String name) {
 
         this(pacman, x, y, dir, name);
         this.rosso = rosso;
@@ -40,7 +40,7 @@ public abstract class Ghost extends ComponentUI {
 
 
         /**
-         * @return true if there is a decision to take on which direction
+         * @return true if there is a decision to take on which direction (means more direction available)
          */
     public boolean move(boolean scatter) {
 
@@ -50,15 +50,15 @@ public abstract class Ghost extends ComponentUI {
         }
 
 
-        if (Board.nRiga(position.y) == 9 && (Board.nColonna(position.x) == 17 || Board.nColonna(position.x) == 18 || Board.nColonna(position.x) == 19) && dir.equals("right")) {
-            position.x += spostamento;
+        if (Board.nRiga(position.y) == 9 && (Board.nColonna(position.x) == 17 || Board.nColonna(position.x) == 18 || Board.nColonna(position.x) == 19) && dir == Direction.right) {
+            position.x += step;
             if (position.x > 700) {
                 position.x = -30;
             }
 
             return false;
-        } else if (Board.nRiga(position.y) == 9 && ((Board.nColonna(position.x)) == -1 || Board.nColonna(position.x) == 0) && dir.equals("left")) {
-            position.x -= spostamento;
+        } else if (Board.nRiga(position.y) == 9 && ((Board.nColonna(position.x)) == -1 || Board.nColonna(position.x) == 0) && dir == Direction.left) {
+            position.x -= step;
 
             if (position.x <= -30) {
                 position.x = 36 * 19 - 2;
@@ -67,45 +67,45 @@ public abstract class Ghost extends ComponentUI {
         }
 
 
-        if (dir.equals("right") && Board.nColonna(position.x) + 1 < Board.board[0].length && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x) + 1]) {
-            position.x += spostamento;
-        } else if (dir.equals("left") && Board.nColonna(position.x) >= 0 && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x)]) {
-            this.position.x -= spostamento;
-        } else if (dir.equals("up") && ((!Board.board[Board.nRiga(position.y)][Board.nColonna(position.x + 2)]) || (Board.nRiga(position.y) == 8 && Board.nColonna(position.x + 2) == 9))) {
-            position.y -= spostamento;
-        } else if (dir.equals("down") && !Board.board[Board.nRiga(position.y) + 1][Board.nColonna(position.x + 2)]) {
-            position.y += spostamento;
+        if (dir == Direction.right && Board.nColonna(position.x) + 1 < Board.board[0].length && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x) + 1]) {
+            position.x += step;
+        } else if (dir == Direction.left && Board.nColonna(position.x) >= 0 && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x)]) {
+            this.position.x -= step;
+        } else if (dir == Direction.up && ((!Board.board[Board.nRiga(position.y)][Board.nColonna(position.x + 2)]) || (Board.nRiga(position.y) == 8 && Board.nColonna(position.x + 2) == 9))) {
+            position.y -= step;
+        } else if (dir == Direction.down && !Board.board[Board.nRiga(position.y) + 1][Board.nColonna(position.x + 2)]) {
+            position.y += step;
         }
 
         int nDir = 0;
-        String consentite[] = new String[4];
-        String dir2 = dir;
-        if (Board.nColonna(position.x) + 1 < Board.board[0].length && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(this.position.x) + 1] && Board.checkV(position.y) && !dir.equals("left")) {
+        String[] consentite = new String[4];
+        Direction dir2 = dir;
+        if (Board.nColonna(position.x) + 1 < Board.board[0].length && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(this.position.x) + 1] && Board.checkV(position.y) && dir != Direction.left) {
             consentite[nDir] = "right";
-            dir2 = "right";
+            dir2 = Direction.right;
             nDir++;
             //	System.out.println(1);
 
         }// CAMBIATO ORA 34
-        if (Board.nColonna(position.x) >= 1 && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x) - 1] && Board.checkV(position.y) && !dir.equals("right")) {
+        if (Board.nColonna(position.x) >= 1 && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x) - 1] && Board.checkV(position.y) && dir != Direction.right) {
             consentite[nDir] = "left";
 
             nDir++;
-            dir2 = "left";
+            dir2 = Direction.left;
             //	System.out.println(2);
 
         } // CAMBIATO ORA
-        if ((!Board.board[Board.nRiga(position.y) - 1][Board.nColonna(position.x + 2)] && Board.checkV(position.x) && !dir.equals("down")) || (Board.nRiga(position.y) == 9 && Board.nColonna(position.x + 2) == 9 && Board.checkV(position.x))) {
+        if ((!Board.board[Board.nRiga(position.y) - 1][Board.nColonna(position.x + 2)] && Board.checkV(position.x) && dir != Direction.down) || (Board.nRiga(position.y) == 9 && Board.nColonna(position.x + 2) == 9 && Board.checkV(position.x))) {
             consentite[nDir] = "up";
             nDir++;
-            dir2 = "up";
+            dir2 = Direction.up;
             //			System.out.println(Board.nRiga(position.y-2)+" "+Board.nColonna(this.position.x+2));
             //			System.out.println(3);
         }
-        if (!Board.board[Board.nRiga(position.y) + 1][Board.nColonna(position.x + 2)] && Board.checkV(position.x) && !dir.equals("up")) {
+        if (!Board.board[Board.nRiga(position.y) + 1][Board.nColonna(position.x + 2)] && Board.checkV(position.x) && dir != Direction.up) {
             consentite[nDir] = "down";
             nDir++;
-            dir2 = "down";
+            dir2 = Direction.down;
 
         }
 
@@ -117,20 +117,9 @@ public abstract class Ghost extends ComponentUI {
 
                 if (scatter && !scared) {
 
-//                    if (target == 4) {
-                        dir = updateDirection(scatteredPoint.x, scatteredPoint.y);
+                        updateDirection(scatteredPoint);
                         return true;
 
-//                        return;
-//                    } else if (target == 0) {
-//                        dir = updateDirection(604, 0);
-//                        return;
-//                    } else if (target == 2) {
-//                        dir = updateDirection(680, 754);
-//                        return;
-//                    } else if (target == 8) {
-//                        dir = updateDirection(50, 754);
-//                    }
                 }
                 if (!(Board.nRiga(position.y + 2) == 9 && Board.nColonna(position.x) > 16) && !scared && !scatter) {
                    return true;
@@ -138,195 +127,65 @@ public abstract class Ghost extends ComponentUI {
 
                 if (!(Board.nRiga(position.y + 2) == 9 && Board.nColonna(position.x) > 16) && scared && !scatter) {
                     Random generatore = new Random();
-                    dir = consentite[generatore.nextInt(nDir)];
+                    dir = Direction.valueOf(consentite[generatore.nextInt(nDir)]);
+//                    System.out.println(dir);
                 }
 
             } else {
-                dir = updateDirection(startX, startY);
+                updateDirection(start);
             }
 
         }
         return false;
     }
 
-    public String updateDirection(int posx, int posy) {
-        double dist1 = 10000, dist2 = 10000, dist3 = 10000, dist4 = 10000;
-        String dir2 = "right";
-        if (!Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x) + 1] && !dir.equals("left")) {
-            dist1 = Math.sqrt(Math.abs(((Board.nColonna(position.x) + 1) - Board.nColonna(posx)) * (((Board.nColonna(position.x) + 1) - Board.nColonna(posx)))) + Math.abs(((Board.nColonna(position.y + 2)) - Board.nColonna(posy + 2)) * (((Board.nColonna(position.y + 2)) - Board.nColonna(posy + 2)))));
-        }
-        if (Board.nColonna(position.x) >= 1 && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x) - 1] && !dir.equals("right")) {
-            dist2 = Math.sqrt(Math.abs(((Board.nColonna(position.x) - 1) - Board.nColonna(posx)) * (((Board.nColonna(position.x) - 1) - Board.nColonna(posx)))) + Math.abs(((Board.nColonna(position.y + 2)) - Board.nColonna(posy + 2)) * (((Board.nColonna(position.y + 2)) - Board.nColonna(posy + 2)))));
+    public void updateDirection(Point target) {
 
-        }
+        ArrayList<Double> distances = new ArrayList<>(Arrays.asList(1000.0, 1000.0, 1000.0, 1000.0));
 
-        if (!Board.board[Board.nRiga(position.y) - 1][Board.nColonna(position.x + 2)] && !dir.equals("down")) {
-            dist3 = Math.sqrt(Math.abs(((Board.nColonna(position.x + 2)) - Board.nColonna(posx + 2)) * (((Board.nColonna(position.x + 2)) - Board.nColonna(posx + 2)))) + Math.abs(((Board.nColonna(position.y) - 1) - Board.nColonna(posy)) * (((Board.nColonna(position.y) - 1) - Board.nColonna(posy)))));
+        if (!Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x) + 1] && dir != Direction.up)
+            distances.set(0, calculateDistance(Board.nColonna(position.x) + 1, Board.nColonna(target.x), Board.nColonna(position.y + 2), Board.nColonna(target.y + 2)));
 
-        }
-        if (!Board.board[Board.nRiga(position.y) + 1][Board.nColonna(position.x + 2)] && !dir.equals("up")) {
-            dist4 = Math.sqrt(Math.abs(((Board.nColonna(position.x + 2)) - Board.nColonna(posx + 2)) * (((Board.nColonna(position.x + 2)) - Board.nColonna(posx + 2)))) + Math.abs(((Board.nColonna(position.y) + 1) - Board.nColonna(posy)) * (((Board.nColonna(position.y) + 1) - Board.nColonna(posy)))));
+        if (!Board.board[Board.nRiga(position.y) - 1][Board.nColonna(position.x + 2)] && dir != Direction.down)
+            distances.set(3, calculateDistance(Board.nColonna(position.x + 2), Board.nColonna(target.x + 2), Board.nColonna(position.y) - 1, Board.nColonna(target.y)));
 
-            //		System.out.println(Board.nRiga(this.posy)+1);
-        }
-        // System.out.println(dir + " " + dist1 + " " + dist3);
-        if (dist1 <= dist2 && dist1 <= dist3 && dist1 <= dist4) {
-            dir2 = "right";
-        } else {
-            if (dist2 <= dist1 && dist2 <= dist3 && dist2 <= dist4) {
-                dir2 = "left";
-            } else {
-                if (dist3 <= dist2 && dist3 <= dist1 && dist3 <= dist4) {
-                    dir2 = "up";
-                } else if (dist4 <= dist2 && dist4 <= dist3 && dist4 <= dist1 && dist4 != 10000) {
-                    dir2 = "down";
-                }
-            }
-        }
-        //	System.out.println(dir2);
-        return dir2;
+        if (Board.nColonna(position.x) >= 1 && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x) - 1] && dir != Direction.right)
+            distances.set(2, calculateDistance(Board.nColonna(position.x) - 1, Board.nColonna(target.x), Board.nColonna(position.y + 2), Board.nColonna(target.y + 2)));
+
+        if (!Board.board[Board.nRiga(position.y) + 1][Board.nColonna(position.x + 2)] && dir != Direction.up)
+            distances.set(1, calculateDistance(Board.nColonna(position.x + 2), Board.nColonna(target.x + 2), Board.nColonna(position.y) + 1, Board.nColonna(target.y)));
+
+        double minDistance = Collections.min(distances);
+        int direction = distances.indexOf(minDistance);
+//        right, down, left, up,
+        dir = Direction.values()[direction];
 
     }
 
-//    public void rosa() {
-//
-//        if (pacman.direction == Direction.up) {
-//
-//            if (pacman.position.y >= 144 && pacman.position.x >= 144) {
-//                dir = updateDirection(pacman.position.x - 144, pacman.position.y - 144);
-//            } else if (pacman.position.y >= 144 && pacman.position.x < 144) {
-//                dir = updateDirection(0, pacman.position.y - 144);
-//            } else if (pacman.position.y < 144 && pacman.position.x < 144) {
-//                dir = updateDirection(0, 0);
-//            } else if (pacman.position.y < 144 && pacman.position.x >= 144) {
-//                dir = updateDirection(pacman.position.x - 144, 0);
-//            }
-//        } else if (pacman.direction == Direction.down) {
-//
-//            if (pacman.position.y < 612) {
-//                dir = updateDirection(pacman.position.x, pacman.position.y + 144);
-//            } else {
-//                dir = updateDirection(pacman.position.x, 754);
-//            }
-//        } else if (pacman.direction == Direction.right) {
-//
-//            if (pacman.position.x < 540) {
-//                dir = updateDirection(pacman.position.x + 144, pacman.position.y);
-//            } else {
-//                dir = updateDirection(682, pacman.position.y);
-//            }
-//        } else if (pacman.direction == Direction.left) {
-//
-//            if (pacman.position.x >= 144) {
-//                dir = updateDirection(pacman.position.x - 144, pacman.position.y);
-//            } else {
-//                dir = updateDirection(0, pacman.position.y);
-//            }
-//        } else {
-//            dir = updateDirection(pacman.position.x, pacman.position.y);
-//        }
-//
-//
-//    }
-
-
-//    public void blue() {
-//
-//        int x = 0, y = 0;
-//
-//        if (pacman.direction == Direction.up) {
-//
-//            if (pacman.position.y >= 72 && pacman.position.x >= 72) {
-//                y = pacman.position.x - 72;
-//                x = pacman.position.x - 72;
-//            } else if (pacman.position.y >= 72 && pacman.position.x < 72) {
-//                x = 0;
-//                y = pacman.position.y - 72;
-//            } else if (pacman.position.y < 72 && pacman.position.x < 72) {
-//                x = 0;
-//                y = 0;
-//            } else if (pacman.position.y < 72 && pacman.position.x >= 72) {
-//                x = pacman.position.x - 72;
-//                y = 0;
-//            }
-//        } else if (pacman.direction == Direction.down) {
-//
-//            if (pacman.position.y < 684) {
-//                x = pacman.position.x;
-//                y = pacman.position.y - 72;
-//            } else {
-//                x = pacman.position.x;
-//                y = pacman.position.y - 754;
-//            }
-//
-//        } else if (pacman.direction == Direction.right) {
-//
-//            if (pacman.position.x < 612) {
-//                x = pacman.position.x + 72;
-//                y = pacman.position.y;
-//            } else {
-//                x = 682;
-//                y = pacman.position.y;
-//            }
-//        } else if (pacman.direction == Direction.left) {
-//
-//            if (pacman.position.x >= 72) {
-//                y = pacman.position.x - 72;
-//                y = pacman.position.y;
-//            } else {
-//                x = 0;
-//                y = pacman.position.y;
-//            }
-//        } else {
-//            x = pacman.position.x;
-//            y = pacman.position.y;
-//        }
-//
-//        x = x + (x - rosso.position.x);
-//        y = y + (y - rosso.position.x);
-//
-//        if (x > 754) {
-//            x = 754;
-//        }
-//        if (x < 0) {
-//            x = 0;
-//        }
-//        if (y > 684) {
-//            y = 684;
-//        }
-//        if (y < 0) {
-//            y = 0;
-//        }
-//        dir = updateDirection(x, y);
-//
-//    }
-
-//    public void arancione() {
-//
-//        double dist = Math.sqrt((position.x - pacman.position.x) * (position.x - pacman.position.x) + (position.y - pacman.position.y) * (position.y - pacman.position.y));
-//        if (dist > 36 * target) {
-//            dir = updateDirection(pacman.position.x, pacman.position.y);
-//        } else {
-//            dir = updateDirection(50, 754);
-//        }
-//
-//    }
+    private static double calculateDistance(int x1, int x2, int y1, int y2) {
+        return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+    }
 
 
     public void scared(boolean scared) {
         this.scared = scared;
-        if (dir.equals("right")) {
-            dir = "left";
-        } else if (dir.equals("left")) {
-            dir = "right";
-        } else if (dir.equals("up")) {
-            dir = "down";
-        } else if (dir.equals("down")) {
-            dir = "up";
-        }
 
-//        setImage("scaredGhost");
-        spostamento = 1;
+//        invert the direction: right, down, left, up,
+        dir = Direction.values()[(dir.ordinal()+2)%4];
+
+
+
+//        if (dir.equals("right")) {
+//            dir = "left";
+//        } else if (dir.equals("left")) {
+//            dir = "right";
+//        } else if (dir.equals("up")) {
+//            dir = "down";
+//        } else if (dir.equals("down")) {
+//            dir = "up";
+//        }
+
+        step = 1;
 
     }
 
@@ -339,20 +198,19 @@ public abstract class Ghost extends ComponentUI {
             position.y++;
         }
 
-//        setImage(ghostName);
-        spostamento = 2;
+        step = 2;
     }
 
 
-    public void mangiato() {
-
-        norm();
-        position.x = startX;
-        position.y = startY;
-        this.dir = startDir;
-        this.eaten = false;
-
-    }
+//    public void mangiato() {
+//
+//        norm();
+//        position.x = startX;
+//        position.y = startY;
+//        this.dir = startDir;
+//        this.eaten = false;
+//
+//    }
 
 
     public void draw(Graphics g){

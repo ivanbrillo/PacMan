@@ -37,10 +37,10 @@ public class Board extends KeyAdapter implements ActionListener {
     private final Cookies cookies = new Cookies();
     private final Apple apple = new Apple();
     private final Pacman pacman = new Pacman();
-    private final Ghost redGhost = new RedGhost(pacman, 326, 252, "right");
-    private final Ghost orangeGhost = new OrangeGhost(pacman, 358, 324, "left", redGhost);
-    private final Ghost blueGhost = new BlueGhost(pacman, 290, 324, "right", redGhost);
-    private final Ghost pinkGhost = new PinkGhost(pacman, 326, 324, "up");
+    private final Ghost redGhost = new RedGhost(pacman, 326, 252, Direction.right);
+    private final Ghost orangeGhost = new OrangeGhost(pacman, 358, 324, Direction.left, redGhost);
+    private final Ghost blueGhost = new BlueGhost(pacman, 290, 324, Direction.right, redGhost);
+    private final Ghost pinkGhost = new PinkGhost(pacman, 326, 324, Direction.up);
     boolean game = true;
     private int milliSeconds = 0;
     private int millisecondsApple = 0;

@@ -21,7 +21,7 @@ public class Pacman extends ComponentUI {
 
 
         if (Board.nRiga(position.y) == 9 && (Board.nColonna(position.x) == 18 || Board.nColonna(position.x) == 19) && dirTrans == Direction.right) {
-            position.x += spostamento;
+            position.x += step;
             if (position.x > 700) {
                 position.x = -30;
             }
@@ -33,7 +33,7 @@ public class Pacman extends ComponentUI {
 
 
         if (dirTrans == Direction.right && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x) + 1]) {
-            position.x += spostamento;
+            position.x += step;
             if (direction == Direction.up && Board.checkV(position.x) && !Board.board[Board.nRiga(position.y) - 1][Board.nColonna(position.x)]) {
                 dirTrans = Direction.up;
             } else if (direction == Direction.down && Board.checkV(position.x) && !Board.board[Board.nRiga(position.y) + 1][Board.nColonna(position.x)]) {
@@ -42,7 +42,7 @@ public class Pacman extends ComponentUI {
                 dirTrans = Direction.left;
             }
         } else if (dirTrans == Direction.left && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x)]) {
-            position.x -= spostamento;
+            position.x -= step;
             if (direction == Direction.up && Board.checkV(position.x) && !Board.board[Board.nRiga(position.y) - 1][Board.nColonna(position.x)]) {
                 dirTrans = Direction.up;
             } else if (direction == Direction.down && Board.checkV(position.x) && !Board.board[Board.nRiga(position.y) + 1][Board.nColonna(position.x)]) {
@@ -51,7 +51,7 @@ public class Pacman extends ComponentUI {
                 dirTrans = Direction.right;
             }
         } else if (dirTrans == Direction.up && !Board.board[Board.nRiga(position.y)][Board.nColonna(position.x + 2)]) {
-            position.y -= spostamento;
+            position.y -= step;
             if (direction == Direction.right && Board.checkO(position.y) && !Board.board[Board.nRiga(position.y)][Board.nColonna(position.x) + 1]) {
                 dirTrans = Direction.right;
             } else if (direction == Direction.left && Board.checkO(position.y) && !Board.board[Board.nRiga(position.y)][Board.nColonna(position.x) - 1]) {
@@ -60,7 +60,7 @@ public class Pacman extends ComponentUI {
                 dirTrans = Direction.down;
             }
         } else if (dirTrans == Direction.down && !Board.board[Board.nRiga(position.y) + 1][Board.nColonna(position.x + 2)]) {
-            position.y += spostamento;
+            position.y += step;
             if (direction == Direction.right && Board.checkO(position.y) && !Board.board[Board.nRiga(position.y)][Board.nColonna(position.x) + 1]) {
                 dirTrans = Direction.right;
             } else if (direction == Direction.left && Board.checkO(position.y) && !Board.board[Board.nRiga(position.y)][Board.nColonna(position.x) - 1]) {

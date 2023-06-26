@@ -11,7 +11,7 @@ public abstract class ComponentUI extends JPanel {
 
     protected final Point position;
     protected Direction direction;
-    protected int spostamento = 2;
+    protected int step = 2;
 
 
     public ComponentUI(String imgName, Point position){

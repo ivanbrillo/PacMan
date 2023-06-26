@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class OrangeGhost extends Ghost{
 
-    public OrangeGhost(Pacman pacman, int x, int y, String dir, Ghost rosso){
+    public OrangeGhost(Pacman pacman, int x, int y, Direction dir, Ghost rosso){
         super (pacman, x, y, dir, rosso, "orangeGhost");
         scatteredPoint = new Point(50, 754);
     }
@@ -18,7 +18,7 @@ public class OrangeGhost extends Ghost{
         }
 
         if( decision && scattered ) {
-            dir = updateDirection(50, 754);
+            updateDirection(scatteredPoint);
         }
 
     }
@@ -28,9 +28,9 @@ public class OrangeGhost extends Ghost{
         double dist = Math.sqrt((position.x - pacman.position.x) * (position.x - pacman.position.x) + (position.y - pacman.position.y) * (position.y - pacman.position.y));
         int target = 8;
         if (dist > 36 * target) {
-            dir = updateDirection(pacman.position.x, pacman.position.y);
+            updateDirection(pacman.position);
         } else {
-            dir = updateDirection(50, 754);
+            updateDirection(scatteredPoint);
         }
     }
 }
