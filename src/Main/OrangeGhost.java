@@ -9,20 +9,6 @@ public class OrangeGhost extends Ghost{
         scatteredPoint = new Point(50, 754);
     }
 
-    public void movement(boolean scattered){
-
-        boolean decision = move(scattered);
-
-        if( decision && !scattered ){
-            behaviouralMove();
-        }
-
-        if( decision && scattered ) {
-            updateDirection(scatteredPoint);
-        }
-
-    }
-
     public void behaviouralMove(){
 
         double dist = Math.sqrt((position.x - pacman.position.x) * (position.x - pacman.position.x) + (position.y - pacman.position.y) * (position.y - pacman.position.y));

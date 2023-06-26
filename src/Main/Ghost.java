@@ -1,19 +1,22 @@
 package Contenitore.Main;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Random;
 
 public abstract class Ghost extends ComponentUI {
 
-    private Point start;
+    private final String ghostName;
+    private final Point start;
+    private final Direction startDir;
+    public boolean scared = false;
     protected Direction dir;
-    private Direction startDir;
     protected Pacman pacman;
     protected Ghost rosso;
-    public boolean scared = false;
-    boolean eaten = false;
-    private final String ghostName;
     protected Point scatteredPoint;
+    boolean eaten = false;
 
     public Ghost(Pacman pacman, int x, int y, Direction dir, String name) {
 
@@ -24,7 +27,7 @@ public abstract class Ghost extends ComponentUI {
         start = new Point(x, y);
 
         this.dir = dir;
-        this.startDir = dir;
+        startDir = dir;
         rosso = this;
     }
 
@@ -35,125 +38,120 @@ public abstract class Ghost extends ComponentUI {
         this.rosso = rosso;
     }
 
+    private static boolean canMoveTo(int row, int col) {
+        return row >= 0 && row < Board.board.length && col >= 0 && col < Board.board[0].length && !Board.board[row][col];
+    }
 
-    public abstract void movement(boolean scattered);
+    private static double calculateDistance(int x1, int x2, int y1, int y2) {
+        return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+    }
+
+    //    public abstract void movement(boolean scattered);
+    public abstract void behaviouralMove();
 
 
-        /**
-         * @return true if there is a decision to take on which direction (means more direction available)
-         */
-    public boolean move(boolean scatter) {
+    /**
+     * @return true if the ghost is on teleporting point
+     */
+    public boolean updatePosition() {
 
-        if (eaten && Board.nColonna(position.x) == 9 && Board.nColonna(position.y) == 7) {
+        // when an eaten ghost return to the spawn point
+        if (eaten && Board.numCell(position.x) == 9 && Board.numCell(position.y) == 7)
             eaten = false;
-//            setImage(ghostName);
+
+        // handle teleporting
+        if (Board.numCell(position.y) == 9 && (Board.numCell(position.x) == 17 || Board.numCell(position.x) == 18 || Board.numCell(position.x) == 19) && dir == Direction.right) {
+            position.x += step;
+            if (position.x > 700) position.x = -30;
+            return true;
         }
 
+        if (Board.numCell(position.y) == 9 && ((Board.numCell(position.x)) == -1 || Board.numCell(position.x) == 0) && dir == Direction.left) {
+            position.x -= step;
+            if (position.x <= -30) position.x = (36 * 19) - 2;
+            return true;
+        }
 
-        if (Board.nRiga(position.y) == 9 && (Board.nColonna(position.x) == 17 || Board.nColonna(position.x) == 18 || Board.nColonna(position.x) == 19) && dir == Direction.right) {
+        if (dir == Direction.right && canMoveTo(Board.numCell(position.y + 2), Board.numCell(position.x) + 1))
             position.x += step;
-            if (position.x > 700) {
-                position.x = -30;
-            }
 
-            return false;
-        } else if (Board.nRiga(position.y) == 9 && ((Board.nColonna(position.x)) == -1 || Board.nColonna(position.x) == 0) && dir == Direction.left) {
+        if (dir == Direction.left && canMoveTo(Board.numCell(position.y + 2), Board.numCell(position.x)))
             position.x -= step;
 
-            if (position.x <= -30) {
-                position.x = 36 * 19 - 2;
-            }
-            return false;
-        }
-
-
-        if (dir == Direction.right && Board.nColonna(position.x) + 1 < Board.board[0].length && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x) + 1]) {
-            position.x += step;
-        } else if (dir == Direction.left && Board.nColonna(position.x) >= 0 && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x)]) {
-            this.position.x -= step;
-        } else if (dir == Direction.up && ((!Board.board[Board.nRiga(position.y)][Board.nColonna(position.x + 2)]) || (Board.nRiga(position.y) == 8 && Board.nColonna(position.x + 2) == 9))) {
+        if (dir == Direction.up && (canMoveTo(Board.numCell(position.y), Board.numCell(position.x + 2)) || (Board.numCell(position.y) == 8 && Board.numCell(position.x + 2) == 9)))
             position.y -= step;
-        } else if (dir == Direction.down && !Board.board[Board.nRiga(position.y) + 1][Board.nColonna(position.x + 2)]) {
+
+        if (dir == Direction.down && canMoveTo(Board.numCell(position.y) + 1, Board.numCell(position.x + 2)))
             position.y += step;
-        }
 
-        int nDir = 0;
-        String[] consentite = new String[4];
-        Direction dir2 = dir;
-        if (Board.nColonna(position.x) + 1 < Board.board[0].length && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(this.position.x) + 1] && Board.checkV(position.y) && dir != Direction.left) {
-            consentite[nDir] = "right";
-            dir2 = Direction.right;
-            nDir++;
-            //	System.out.println(1);
-
-        }// CAMBIATO ORA 34
-        if (Board.nColonna(position.x) >= 1 && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x) - 1] && Board.checkV(position.y) && dir != Direction.right) {
-            consentite[nDir] = "left";
-
-            nDir++;
-            dir2 = Direction.left;
-            //	System.out.println(2);
-
-        } // CAMBIATO ORA
-        if ((!Board.board[Board.nRiga(position.y) - 1][Board.nColonna(position.x + 2)] && Board.checkV(position.x) && dir != Direction.down) || (Board.nRiga(position.y) == 9 && Board.nColonna(position.x + 2) == 9 && Board.checkV(position.x))) {
-            consentite[nDir] = "up";
-            nDir++;
-            dir2 = Direction.up;
-            //			System.out.println(Board.nRiga(position.y-2)+" "+Board.nColonna(this.position.x+2));
-            //			System.out.println(3);
-        }
-        if (!Board.board[Board.nRiga(position.y) + 1][Board.nColonna(position.x + 2)] && Board.checkV(position.x) && dir != Direction.up) {
-            consentite[nDir] = "down";
-            nDir++;
-            dir2 = Direction.down;
-
-        }
-
-
-        if (nDir <= 1) {
-            dir = dir2;
-        } else {
-            if (!eaten) {
-
-                if (scatter && !scared) {
-
-                        updateDirection(scatteredPoint);
-                        return true;
-
-                }
-                if (!(Board.nRiga(position.y + 2) == 9 && Board.nColonna(position.x) > 16) && !scared && !scatter) {
-                   return true;
-                }
-
-                if (!(Board.nRiga(position.y + 2) == 9 && Board.nColonna(position.x) > 16) && scared && !scatter) {
-                    Random generatore = new Random();
-                    dir = Direction.valueOf(consentite[generatore.nextInt(nDir)]);
-//                    System.out.println(dir);
-                }
-
-            } else {
-                updateDirection(start);
-            }
-
-        }
         return false;
     }
+
+    public void move(boolean scatter) {
+        if (updatePosition())
+            return;
+
+        ArrayList<Direction> availableMoves = new ArrayList<>();
+
+        int newRow = Board.numCell(position.y + 2);
+        int newCol = Board.numCell(position.x + 2);
+
+        if (newCol + 1 < Board.board[0].length && !Board.board[newRow][newCol + 1] && Board.checkAngle(position.y) && dir != Direction.left)
+            availableMoves.add(Direction.right);
+
+        if (newCol >= 1 && !Board.board[newRow][newCol - 1] && Board.checkAngle(position.y) && dir != Direction.right)
+            availableMoves.add(Direction.left);
+
+        if (((!Board.board[Board.numCell(position.y) - 1][newCol] && dir != Direction.down) || (Board.numCell(position.y) == 9 && newCol == 9)) && Board.checkAngle(position.x))
+            availableMoves.add(Direction.up);
+
+        if (!Board.board[Board.numCell(position.y) + 1][newCol] && Board.checkAngle(position.x) && dir != Direction.up)
+            availableMoves.add(Direction.down);
+
+        if (availableMoves.isEmpty())
+            return;
+
+        if (availableMoves.size() == 1) {
+            dir = availableMoves.get(0);
+            return;
+        }
+
+        if (eaten) {
+            updateDirection(start);
+            return;
+        }
+
+        if (scatter) {
+            updateDirection(scatteredPoint);
+            return;
+        }
+
+        if (scared) {
+            Random generatore = new Random();
+            dir = availableMoves.get(generatore.nextInt(availableMoves.size()));
+            return;
+        }
+
+        behaviouralMove();
+
+    }
+
 
     public void updateDirection(Point target) {
 
         ArrayList<Double> distances = new ArrayList<>(Arrays.asList(1000.0, 1000.0, 1000.0, 1000.0));
 
-        if (!Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x) + 1] && dir != Direction.up)
-            distances.set(0, calculateDistance(Board.nColonna(position.x) + 1, Board.nColonna(target.x), Board.nColonna(position.y + 2), Board.nColonna(target.y + 2)));
+        if (!Board.board[Board.numCell(position.y + 2)][Board.numCell(position.x) + 1] && dir != Direction.up)
+            distances.set(0, calculateDistance(Board.numCell(position.x) + 1, Board.numCell(target.x), Board.numCell(position.y + 2), Board.numCell(target.y + 2)));
 
-        if (!Board.board[Board.nRiga(position.y) - 1][Board.nColonna(position.x + 2)] && dir != Direction.down)
-            distances.set(3, calculateDistance(Board.nColonna(position.x + 2), Board.nColonna(target.x + 2), Board.nColonna(position.y) - 1, Board.nColonna(target.y)));
+        if (!Board.board[Board.numCell(position.y) - 1][Board.numCell(position.x + 2)] && dir != Direction.down)
+            distances.set(3, calculateDistance(Board.numCell(position.x + 2), Board.numCell(target.x + 2), Board.numCell(position.y) - 1, Board.numCell(target.y)));
 
-        if (Board.nColonna(position.x) >= 1 && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x) - 1] && dir != Direction.right)
-            distances.set(2, calculateDistance(Board.nColonna(position.x) - 1, Board.nColonna(target.x), Board.nColonna(position.y + 2), Board.nColonna(target.y + 2)));
+        if (Board.numCell(position.x) >= 1 && !Board.board[Board.numCell(position.y + 2)][Board.numCell(position.x) - 1] && dir != Direction.right)
+            distances.set(2, calculateDistance(Board.numCell(position.x) - 1, Board.numCell(target.x), Board.numCell(position.y + 2), Board.numCell(target.y + 2)));
 
-        if (!Board.board[Board.nRiga(position.y) + 1][Board.nColonna(position.x + 2)] && dir != Direction.up)
-            distances.set(1, calculateDistance(Board.nColonna(position.x + 2), Board.nColonna(target.x + 2), Board.nColonna(position.y) + 1, Board.nColonna(target.y)));
+        if (!Board.board[Board.numCell(position.y) + 1][Board.numCell(position.x + 2)] && dir != Direction.up)
+            distances.set(1, calculateDistance(Board.numCell(position.x + 2), Board.numCell(target.x + 2), Board.numCell(position.y) + 1, Board.numCell(target.y)));
 
         double minDistance = Collections.min(distances);
         int direction = distances.indexOf(minDistance);
@@ -162,29 +160,11 @@ public abstract class Ghost extends ComponentUI {
 
     }
 
-    private static double calculateDistance(int x1, int x2, int y1, int y2) {
-        return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-    }
+    public void scared() {
+        scared = true;
 
-
-    public void scared(boolean scared) {
-        this.scared = scared;
-
-//        invert the direction: right, down, left, up,
-        dir = Direction.values()[(dir.ordinal()+2)%4];
-
-
-
-//        if (dir.equals("right")) {
-//            dir = "left";
-//        } else if (dir.equals("left")) {
-//            dir = "right";
-//        } else if (dir.equals("up")) {
-//            dir = "down";
-//        } else if (dir.equals("down")) {
-//            dir = "up";
-//        }
-
+//      invert the direction: right, down, left, up,
+        dir = Direction.values()[(dir.ordinal() + 2) % 4];
         step = 1;
 
     }
@@ -201,23 +181,11 @@ public abstract class Ghost extends ComponentUI {
         step = 2;
     }
 
+    public void draw(Graphics g) {
 
-//    public void mangiato() {
-//
-//        norm();
-//        position.x = startX;
-//        position.y = startY;
-//        this.dir = startDir;
-//        this.eaten = false;
-//
-//    }
-
-
-    public void draw(Graphics g){
-
-        if(scared)
+        if (scared)
             setImage("scaredGhost");
-        else if(eaten)
+        else if (eaten)
             setImage("eyes");
         else
             setImage(ghostName);

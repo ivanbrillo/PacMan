@@ -9,20 +9,6 @@ public class RedGhost extends Ghost {
         scatteredPoint = new Point(604, 0);
     }
 
-    public void movement(boolean scattered){
-
-        boolean decision = move(scattered);
-
-        if( decision && !scattered ){
-            behaviouralMove();
-        }
-
-        if( decision && scattered ) {
-            updateDirection(scatteredPoint);
-        }
-
-    }
-
     public void behaviouralMove(){
         updateDirection(pacman.position);
     }

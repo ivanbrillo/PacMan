@@ -9,21 +9,6 @@ public class BlueGhost extends Ghost{
         scatteredPoint = new Point(680, 754);
     }
 
-    public void movement(boolean scattered){
-
-        boolean decision = move(scattered);
-
-        if( decision && !scattered ){
-            behaviouralMove();
-        }
-
-        if( decision && scattered ) {
-            updateDirection(scatteredPoint);
-        }
-
-    }
-
-
     public void behaviouralMove() {
 
         Point p = new Point(pacman.position);

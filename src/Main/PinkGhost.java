@@ -10,19 +10,6 @@ public class PinkGhost extends Ghost{
 
     }
 
-    public void movement(boolean scattered){
-
-        boolean decision = move(scattered);
-
-        if( decision && !scattered ){
-            behaviouralMove();
-        }
-
-        if( decision && scattered ) {
-            updateDirection(scatteredPoint);
-        }
-
-    }
 
     public void behaviouralMove() {
         Point p = new Point(pacman.position);

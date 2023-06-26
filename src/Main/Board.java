@@ -52,28 +52,12 @@ public class Board extends KeyAdapter implements ActionListener {
 
     }
 
-    public static int nColonna(int posx) {
-        return (int) posx / 36;
+    public static int numCell(int position) {
+        return  position / 36;
     }
 
-    public static int nRiga(int posy) {
-        return (int) posy / 36;
-    }
-
-    public static boolean checkV(int posx) {
-        boolean angolo = false;
-        if (posx % 36 == 0) {
-            angolo = true;
-        }
-        return angolo;
-    }
-
-    public static boolean checkO(int posy) {
-        boolean angolo = false;
-        if (posy % 36 == 0) {
-            angolo = true;
-        }
-        return angolo;
+    public static boolean checkAngle(int position) {
+        return position % 36 == 0;
     }
 
     @Override
@@ -107,27 +91,27 @@ public class Board extends KeyAdapter implements ActionListener {
             cookies.eatCookies(pacman.position.x, pacman.position.y);
 
             if (milliSeconds <= 5000) {
-                redGhost.movement(true);
-                pinkGhost.movement(true);
-                blueGhost.movement(true);
+                redGhost.move(true);
+                pinkGhost.move(true);
+                blueGhost.move(true);
 //              arancione.muovi(true);
             } else {
-                redGhost.movement(false);
-                pinkGhost.movement(false);
-                blueGhost.movement(false);
+                redGhost.move(false);
+                pinkGhost.move(false);
+                blueGhost.move(false);
 
                 if (cookies.startArancione) {
-                    orangeGhost.movement(false);
+                    orangeGhost.move(false);
                 }
 
             }
 
             if (apple.checkMela(pacman.position)) {
 
-                redGhost.scared(true);
-                pinkGhost.scared(true);
-                blueGhost.scared(true);
-                orangeGhost.scared(true);
+                redGhost.scared();
+                pinkGhost.scared();
+                blueGhost.scared();
+                orangeGhost.scared();
 
                 millisecondsApple = 0;
             }
@@ -179,16 +163,16 @@ public class Board extends KeyAdapter implements ActionListener {
             }
         } else {
             if (redGhost.eaten) {
-                redGhost.movement(false);
+                redGhost.move(false);
             }
             if (blueGhost.eaten) {
-                blueGhost.movement(false);
+                blueGhost.move(false);
             }
             if (orangeGhost.eaten) {
-                orangeGhost.movement(false);
+                orangeGhost.move(false);
             }
             if (pinkGhost.eaten) {
-                pinkGhost.movement(false);
+                pinkGhost.move(false);
             }
         }
 

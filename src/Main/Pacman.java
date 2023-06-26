@@ -20,50 +20,50 @@ public class Pacman extends ComponentUI {
     public void muovi() {
 
 
-        if (Board.nRiga(position.y) == 9 && (Board.nColonna(position.x) == 18 || Board.nColonna(position.x) == 19) && dirTrans == Direction.right) {
+        if (Board.numCell(position.y) == 9 && (Board.numCell(position.x) == 18 || Board.numCell(position.x) == 19) && dirTrans == Direction.right) {
             position.x += step;
             if (position.x > 700) {
                 position.x = -30;
             }
 
             return;
-        } else if (Board.nRiga(position.y) == 9 && (Board.nColonna(position.x)) == -1 && dirTrans == Direction.left) {
+        } else if (Board.numCell(position.y) == 9 && (Board.numCell(position.x)) == -1 && dirTrans == Direction.left) {
             position.x = 36 * 19 - 2;
         }
 
 
-        if (dirTrans == Direction.right && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x) + 1]) {
+        if (dirTrans == Direction.right && !Board.board[Board.numCell(position.y + 2)][Board.numCell(position.x) + 1]) {
             position.x += step;
-            if (direction == Direction.up && Board.checkV(position.x) && !Board.board[Board.nRiga(position.y) - 1][Board.nColonna(position.x)]) {
+            if (direction == Direction.up && Board.checkAngle(position.x) && !Board.board[Board.numCell(position.y) - 1][Board.numCell(position.x)]) {
                 dirTrans = Direction.up;
-            } else if (direction == Direction.down && Board.checkV(position.x) && !Board.board[Board.nRiga(position.y) + 1][Board.nColonna(position.x)]) {
+            } else if (direction == Direction.down && Board.checkAngle(position.x) && !Board.board[Board.numCell(position.y) + 1][Board.numCell(position.x)]) {
                 dirTrans = Direction.down;
             } else if (direction == Direction.left) {
                 dirTrans = Direction.left;
             }
-        } else if (dirTrans == Direction.left && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x)]) {
+        } else if (dirTrans == Direction.left && !Board.board[Board.numCell(position.y + 2)][Board.numCell(position.x)]) {
             position.x -= step;
-            if (direction == Direction.up && Board.checkV(position.x) && !Board.board[Board.nRiga(position.y) - 1][Board.nColonna(position.x)]) {
+            if (direction == Direction.up && Board.checkAngle(position.x) && !Board.board[Board.numCell(position.y) - 1][Board.numCell(position.x)]) {
                 dirTrans = Direction.up;
-            } else if (direction == Direction.down && Board.checkV(position.x) && !Board.board[Board.nRiga(position.y) + 1][Board.nColonna(position.x)]) {
+            } else if (direction == Direction.down && Board.checkAngle(position.x) && !Board.board[Board.numCell(position.y) + 1][Board.numCell(position.x)]) {
                 dirTrans = Direction.down;
             } else if (direction == Direction.right) {
                 dirTrans = Direction.right;
             }
-        } else if (dirTrans == Direction.up && !Board.board[Board.nRiga(position.y)][Board.nColonna(position.x + 2)]) {
+        } else if (dirTrans == Direction.up && !Board.board[Board.numCell(position.y)][Board.numCell(position.x + 2)]) {
             position.y -= step;
-            if (direction == Direction.right && Board.checkO(position.y) && !Board.board[Board.nRiga(position.y)][Board.nColonna(position.x) + 1]) {
+            if (direction == Direction.right && Board.checkAngle(position.y) && !Board.board[Board.numCell(position.y)][Board.numCell(position.x) + 1]) {
                 dirTrans = Direction.right;
-            } else if (direction == Direction.left && Board.checkO(position.y) && !Board.board[Board.nRiga(position.y)][Board.nColonna(position.x) - 1]) {
+            } else if (direction == Direction.left && Board.checkAngle(position.y) && !Board.board[Board.numCell(position.y)][Board.numCell(position.x) - 1]) {
                 dirTrans = Direction.left;
             } else if (direction == Direction.down) {
                 dirTrans = Direction.down;
             }
-        } else if (dirTrans == Direction.down && !Board.board[Board.nRiga(position.y) + 1][Board.nColonna(position.x + 2)]) {
+        } else if (dirTrans == Direction.down && !Board.board[Board.numCell(position.y) + 1][Board.numCell(position.x + 2)]) {
             position.y += step;
-            if (direction == Direction.right && Board.checkO(position.y) && !Board.board[Board.nRiga(position.y)][Board.nColonna(position.x) + 1]) {
+            if (direction == Direction.right && Board.checkAngle(position.y) && !Board.board[Board.numCell(position.y)][Board.numCell(position.x) + 1]) {
                 dirTrans = Direction.right;
-            } else if (direction == Direction.left && Board.checkO(position.y) && !Board.board[Board.nRiga(position.y)][Board.nColonna(position.x) - 1]) {
+            } else if (direction == Direction.left && Board.checkAngle(position.y) && !Board.board[Board.numCell(position.y)][Board.numCell(position.x) - 1]) {
                 dirTrans = Direction.left;
             } else if (direction == Direction.up) {
                 dirTrans = Direction.up;
