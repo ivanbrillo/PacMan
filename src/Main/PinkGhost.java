@@ -1,13 +1,13 @@
 package Contenitore.Main;
 
+import java.awt.*;
+
 public class PinkGhost extends Ghost{
 
     public PinkGhost(Pacman pacman, int x, int y, String dir){
         super(pacman, x, y, dir, "pinkGhost");
-    }
+        scatteredPoint = new Point(680, 754);
 
-    public PinkGhost(Pacman pacman, int x, int y, String dir, Ghost rosso){
-        super (pacman, x, y, dir, rosso, "pinkGhost");
     }
 
     public void movement(boolean scattered){

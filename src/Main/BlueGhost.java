@@ -1,13 +1,12 @@
 package Contenitore.Main;
 
-public class BlueGhost extends Ghost{
+import java.awt.*;
 
-    public BlueGhost(Pacman pacman, int x, int y, String dir){
-        super(pacman, x, y, dir, "blueGhost");
-    }
+public class BlueGhost extends Ghost{
 
     public BlueGhost(Pacman pacman, int x, int y, String dir, Ghost rosso){
         super (pacman, x, y, dir, rosso, "blueGhost");
+        scatteredPoint = new Point(80, 0);
     }
 
     public void movement(boolean scattered){

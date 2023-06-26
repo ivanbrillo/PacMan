@@ -4,28 +4,27 @@ import java.awt.*;
 import java.util.Random;
 
 public abstract class Ghost extends ComponentUI {
-//    public int position.x, position.y;
     private int startX, startY;
     protected String dir;
     String startDir;
     protected Pacman pacman;
     protected Ghost rosso;
-    private int target;
     public boolean scared = false;
-    boolean mangiato = false;
+    boolean eaten = false;
+    private final String ghostName;
+    protected Point scatteredPoint;
 
     public Ghost(Pacman pacman, int x, int y, String dir, String name) {
 
         super(name, new Point(x, y));
+        ghostName = name;
 
         this.pacman = pacman;
         this.startX = x;
         this.startY = y;
-//        this.position.x = position.x; //326;
-//        position.y = position.y; //252;
+
         this.dir = dir;
         this.startDir = dir;
-        this.target = target;
         rosso = this;
     }
 
@@ -45,8 +44,9 @@ public abstract class Ghost extends ComponentUI {
          */
     public boolean move(boolean scatter) {
 
-        if (mangiato && Board.nColonna(position.x) == 9 && Board.nColonna(position.y) == 7) {
-            mangiato = false;
+        if (eaten && Board.nColonna(position.x) == 9 && Board.nColonna(position.y) == 7) {
+            eaten = false;
+//            setImage(ghostName);
         }
 
 
@@ -86,7 +86,7 @@ public abstract class Ghost extends ComponentUI {
             nDir++;
             //	System.out.println(1);
 
-        }// CAMBIATO ORA  34
+        }// CAMBIATO ORA 34
         if (Board.nColonna(position.x) >= 1 && !Board.board[Board.nRiga(position.y + 2)][Board.nColonna(position.x) - 1] && Board.checkV(position.y) && !dir.equals("right")) {
             consentite[nDir] = "left";
 
@@ -113,13 +113,14 @@ public abstract class Ghost extends ComponentUI {
         if (nDir <= 1) {
             dir = dir2;
         } else {
-            if (!mangiato) {
+            if (!eaten) {
 
                 if (scatter && !scared) {
 
-                    return true;
 //                    if (target == 4) {
-//                        dir = updateDirection(80, 0);
+                        dir = updateDirection(scatteredPoint.x, scatteredPoint.y);
+                        return true;
+
 //                        return;
 //                    } else if (target == 0) {
 //                        dir = updateDirection(604, 0);
@@ -324,6 +325,7 @@ public abstract class Ghost extends ComponentUI {
             dir = "up";
         }
 
+//        setImage("scaredGhost");
         spostamento = 1;
 
     }
@@ -337,6 +339,7 @@ public abstract class Ghost extends ComponentUI {
             position.y++;
         }
 
+//        setImage(ghostName);
         spostamento = 2;
     }
 
@@ -347,10 +350,24 @@ public abstract class Ghost extends ComponentUI {
         position.x = startX;
         position.y = startY;
         this.dir = startDir;
-        this.mangiato = false;
-
+        this.eaten = false;
 
     }
+
+
+    public void draw(Graphics g){
+
+        if(scared)
+            setImage("scaredGhost");
+        else if(eaten)
+            setImage("eyes");
+        else
+            setImage(ghostName);
+
+        super.draw(g);
+
+    }
+
 
 }
 

@@ -11,9 +11,11 @@ public class BoardUI extends JPanel {
     private final Image background = Toolkit.getDefaultToolkit().createImage("./src/images/"+"board.png");
     private final Pacman pacman;
     private final Ghost pinkGhost, orangeGhost, blueGhost, redGhost;
-    private final Cookies balls;
+    private final Cookies cookies;
+    private final Apple apple;
 
-    public BoardUI(Pacman pacman, Ghost redGhost, Ghost pinkGhost, Ghost orangeGhost, Ghost blueGhost, Cookies balls){
+
+    public BoardUI(Pacman pacman, Ghost redGhost, Ghost pinkGhost, Ghost orangeGhost, Ghost blueGhost, Cookies cookies, Apple apple){
 //        Toolkit toolkit = Toolkit.getDefaultToolkit();
 //        for (String pathImage : pathImages) {
 //            String path = "./src/images/" + pathImage + ".png";
@@ -25,7 +27,8 @@ public class BoardUI extends JPanel {
         this.blueGhost = blueGhost;
         this.orangeGhost = orangeGhost;
         this.pinkGhost = pinkGhost;
-        this.balls = balls;
+        this.cookies = cookies;
+        this.apple = apple;
 
     }
 
@@ -37,13 +40,13 @@ public class BoardUI extends JPanel {
         setOpaque(false);
         g.drawImage(background, 0, 0, null);
 
-
-        balls.draw(g);
+        cookies.draw(g);
         pacman.draw(g);
         redGhost.draw(g);
         blueGhost.draw(g);
         orangeGhost.draw(g);
         pinkGhost.draw(g);
+        apple.draw(g);
 
     }
 
