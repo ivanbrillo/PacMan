@@ -46,7 +46,6 @@ public abstract class Ghost extends ComponentUI {
         return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
     }
 
-    //    public abstract void movement(boolean scattered);
     public abstract void behaviouralMove();
 
 
@@ -141,7 +140,7 @@ public abstract class Ghost extends ComponentUI {
 
         ArrayList<Double> distances = new ArrayList<>(Arrays.asList(1000.0, 1000.0, 1000.0, 1000.0));
 
-        if (!Board.board[Board.numCell(position.y + 2)][Board.numCell(position.x) + 1] && dir != Direction.up)
+        if (!Board.board[Board.numCell(position.y + 2)][Board.numCell(position.x) + 1] && dir != Direction.left)
             distances.set(0, calculateDistance(Board.numCell(position.x) + 1, Board.numCell(target.x), Board.numCell(position.y + 2), Board.numCell(target.y + 2)));
 
         if (!Board.board[Board.numCell(position.y) - 1][Board.numCell(position.x + 2)] && dir != Direction.down)

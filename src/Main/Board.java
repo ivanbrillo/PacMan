@@ -78,7 +78,7 @@ public class Board extends KeyAdapter implements ActionListener {
         milliSeconds += 15;
         if (milliSeconds % 30 == 0) {
             millisecondsApple += 30;
-            pacman.muovi();
+            pacman.move();
             if (millisecondsApple >= 8000) {
                 redGhost.norm();
                 pinkGhost.norm();
