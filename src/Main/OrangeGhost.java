@@ -1,6 +1,7 @@
 package Contenitore.Main;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class OrangeGhost extends Ghost{
 
@@ -9,14 +10,14 @@ public class OrangeGhost extends Ghost{
         scatteredPoint = new Point(50, 754);
     }
 
-    public void behaviouralMove(){
+    public void behaviouralMove(ArrayList<Direction> availableDirection){
 
         double dist = Math.sqrt((position.x - pacman.position.x) * (position.x - pacman.position.x) + (position.y - pacman.position.y) * (position.y - pacman.position.y));
         int target = 8;
         if (dist > 36 * target) {
-            updateDirection(pacman.position);
+            updateDirection(pacman.position, availableDirection);
         } else {
-            updateDirection(scatteredPoint);
+            updateDirection(scatteredPoint, availableDirection);
         }
     }
 }

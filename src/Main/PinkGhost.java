@@ -1,6 +1,7 @@
 package Contenitore.Main;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class PinkGhost extends Ghost{
 
@@ -11,7 +12,7 @@ public class PinkGhost extends Ghost{
     }
 
 
-    public void behaviouralMove() {
+    public void behaviouralMove(ArrayList<Direction> availableDirection) {
         Point p = new Point(pacman.position);
 
         if (pacman.direction == Direction.up) {
@@ -28,7 +29,7 @@ public class PinkGhost extends Ghost{
             p.y = pacman.position.y;
         }
 
-        updateDirection(p);
+        updateDirection(p, availableDirection);
     }
 
 
