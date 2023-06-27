@@ -10,13 +10,9 @@ public class Main {
         JFrame frame = new JFrame();
         Board board = new Board();
         frame.add(board.boardUI);
-        int larghezza = 696;
-        int altezza = 792;
-        frame.setSize(larghezza, altezza);
+        frame.setSize(696, 792);
 
         frame.addKeyListener(board);
-        frame.getContentPane().add(board.boardUI);
-
         frame.setVisible(true);
         frame.setResizable(true);
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);

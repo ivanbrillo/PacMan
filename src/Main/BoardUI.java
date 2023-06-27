@@ -16,11 +16,6 @@ public class BoardUI extends JPanel {
 
 
     public BoardUI(Pacman pacman, Ghost redGhost, Ghost pinkGhost, Ghost orangeGhost, Ghost blueGhost, Cookies cookies, Apple apple){
-//        Toolkit toolkit = Toolkit.getDefaultToolkit();
-//        for (String pathImage : pathImages) {
-//            String path = "./src/images/" + pathImage + ".png";
-//            images.put(pathImage, toolkit.createImage(path));
-//        }
 
         this.pacman = pacman;
         this.redGhost = redGhost;

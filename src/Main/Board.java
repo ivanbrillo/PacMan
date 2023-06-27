@@ -17,11 +17,11 @@ public class Board extends KeyAdapter implements ActionListener {
             {true, false, true, true, false, true, false, true, true, true, true, true, false, true, false, true, true, false, true},
             {true, false, false, false, false, true, false, false, false, true, false, false, false, true, false, false, false, false, true},
             {true, true, true, true, false, true, true, true, false, true, false, true, true, true, false, true, true, true, true},
-            {false, false, false, true, false, true, false, false, false, false, false, false, false, true, false, true, false, false, false},
+            {true, true, true, true, false, true, false, false, false, false, false, false, false, true, false, true, true, true, true},
             {true, true, true, true, false, true, false, true, true, true, true, true, false, true, false, true, true, true, true},
             {false, false, false, false, false, false, false, true, true, false, true, true, false, false, false, false, false, false, false},
             {true, true, true, true, false, true, false, true, true, true, true, true, false, true, false, true, true, true, true},
-            {false, false, false, true, false, true, false, false, false, false, false, false, false, true, false, true, false, false, false},
+            {true, true, true, true, false, true, false, false, false, false, false, false, false, true, false, true, true, true, true},
             {true, true, true, true, false, true, false, true, true, true, true, true, false, true, false, true, true, true, true},
             {true, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, true},
             {true, false, true, true, false, true, true, true, false, true, false, true, true, true, false, true, true, false, true},
@@ -32,6 +32,7 @@ public class Board extends KeyAdapter implements ActionListener {
             {true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true},
             {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}
     };
+
     public final BoardUI boardUI;
     private final Timer timer = new Timer(15, this);
     private final Cookies cookies = new Cookies();
