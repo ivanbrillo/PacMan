@@ -12,11 +12,12 @@ public abstract class Ghost extends ComponentUI {
     private final Point start;
     private final Direction startDir;
     public boolean scared = false;
-    protected Direction dir;
     protected Pacman pacman;
     protected Ghost rosso;
     protected Point scatteredPoint;
     boolean eaten = false;
+    Random randomGenerator = new Random();
+
 
     public Ghost(Pacman pacman, int x, int y, Direction dir, String name) {
 
@@ -26,9 +27,8 @@ public abstract class Ghost extends ComponentUI {
         this.pacman = pacman;
         start = new Point(x, y);
 
-        this.dir = dir;
+        direction = dir;
         startDir = dir;
-        rosso = this;
     }
 
 
@@ -46,8 +46,7 @@ public abstract class Ghost extends ComponentUI {
         return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
     }
 
-    public abstract void behaviouralMove();
-
+    public abstract void behaviouralMove(ArrayList<Direction> availableDirections);
 
     /**
      * @return true if the ghost is on teleporting point
@@ -59,28 +58,28 @@ public abstract class Ghost extends ComponentUI {
             eaten = false;
 
         // handle teleporting
-        if (Board.numCell(position.y) == 9 && (Board.numCell(position.x) == 17 || Board.numCell(position.x) == 18 || Board.numCell(position.x) == 19) && dir == Direction.right) {
+        if (Board.numCell(position.y) == 9 && (Board.numCell(position.x) == 17 || Board.numCell(position.x) == 18 || Board.numCell(position.x) == 19) && direction == Direction.right) {
             position.x += step;
             if (position.x > 700) position.x = -30;
             return true;
         }
 
-        if (Board.numCell(position.y) == 9 && ((Board.numCell(position.x)) == -1 || Board.numCell(position.x) == 0) && dir == Direction.left) {
+        if (Board.numCell(position.y) == 9 && ((Board.numCell(position.x)) == -1 || Board.numCell(position.x) == 0) && direction == Direction.left) {
             position.x -= step;
             if (position.x <= -30) position.x = (36 * 19) - 2;
             return true;
         }
 
-        if (dir == Direction.right && canMoveTo(Board.numCell(position.y + 2), Board.numCell(position.x) + 1))
+        if (direction == Direction.right && canMoveTo(Board.numCell(position.y + 2), Board.numCell(position.x) + 1))
             position.x += step;
 
-        if (dir == Direction.left && canMoveTo(Board.numCell(position.y + 2), Board.numCell(position.x)))
+        if (direction == Direction.left && canMoveTo(Board.numCell(position.y + 2), Board.numCell(position.x)))
             position.x -= step;
 
-        if (dir == Direction.up && (canMoveTo(Board.numCell(position.y), Board.numCell(position.x + 2)) || (Board.numCell(position.y) == 8 && Board.numCell(position.x + 2) == 9)))
+        if (direction == Direction.up && (canMoveTo(Board.numCell(position.y), Board.numCell(position.x + 2)) || (Board.numCell(position.y) == 8 && Board.numCell(position.x + 2) == 9)))
             position.y -= step;
 
-        if (dir == Direction.down && canMoveTo(Board.numCell(position.y) + 1, Board.numCell(position.x + 2)))
+        if (direction == Direction.down && canMoveTo(Board.numCell(position.y) + 1, Board.numCell(position.x + 2)))
             position.y += step;
 
         return false;
@@ -90,72 +89,73 @@ public abstract class Ghost extends ComponentUI {
         if (updatePosition())
             return;
 
+        ArrayList<Direction> availableMoves = getAvailableDirections();
+
+        if (availableMoves.isEmpty())
+            return;
+
+        if (availableMoves.size() == 1 || scared) {
+            direction = availableMoves.get(randomGenerator.nextInt(availableMoves.size()));
+            return;
+        }
+
+        if (eaten) {
+            updateDirection(start, availableMoves);
+            return;
+        }
+
+        if (scatter) {
+            updateDirection(scatteredPoint, availableMoves);
+            return;
+        }
+
+        behaviouralMove(availableMoves);
+
+    }
+
+    private ArrayList<Direction> getAvailableDirections() {
+
         ArrayList<Direction> availableMoves = new ArrayList<>();
 
         int newRow = Board.numCell(position.y + 2);
         int newCol = Board.numCell(position.x + 2);
 
-        if (newCol + 1 < Board.board[0].length && !Board.board[newRow][newCol + 1] && Board.checkAngle(position.y) && dir != Direction.left)
+        if (newCol + 1 < Board.board[0].length && !Board.board[newRow][newCol + 1] && Board.checkAngle(position.y) && direction != Direction.left)
             availableMoves.add(Direction.right);
 
-        if (newCol >= 1 && !Board.board[newRow][newCol - 1] && Board.checkAngle(position.y) && dir != Direction.right)
+        if (newCol >= 1 && !Board.board[newRow][newCol - 1] && Board.checkAngle(position.y) && direction != Direction.right)
             availableMoves.add(Direction.left);
 
-        if (((!Board.board[Board.numCell(position.y) - 1][newCol] && dir != Direction.down) || (Board.numCell(position.y) == 9 && newCol == 9)) && Board.checkAngle(position.x))
+        if (((!Board.board[Board.numCell(position.y) - 1][newCol] && direction != Direction.down) || (Board.numCell(position.y) == 9 && newCol == 9)) && Board.checkAngle(position.x))
             availableMoves.add(Direction.up);
 
-        if (!Board.board[Board.numCell(position.y) + 1][newCol] && Board.checkAngle(position.x) && dir != Direction.up)
+        if (!Board.board[Board.numCell(position.y) + 1][newCol] && Board.checkAngle(position.x) && direction != Direction.up)
             availableMoves.add(Direction.down);
 
-        if (availableMoves.isEmpty())
-            return;
-
-        if (availableMoves.size() == 1) {
-            dir = availableMoves.get(0);
-            return;
-        }
-
-        if (eaten) {
-            updateDirection(start);
-            return;
-        }
-
-        if (scatter) {
-            updateDirection(scatteredPoint);
-            return;
-        }
-
-        if (scared) {
-            Random generatore = new Random();
-            dir = availableMoves.get(generatore.nextInt(availableMoves.size()));
-            return;
-        }
-
-        behaviouralMove();
-
+        return availableMoves;
     }
 
 
-    public void updateDirection(Point target) {
+    public void updateDirection(Point target, ArrayList<Direction> availableDirection) {
 
         ArrayList<Double> distances = new ArrayList<>(Arrays.asList(1000.0, 1000.0, 1000.0, 1000.0));
 
-        if (!Board.board[Board.numCell(position.y + 2)][Board.numCell(position.x) + 1] && dir != Direction.left)
+        if (availableDirection.contains(Direction.right))
             distances.set(0, calculateDistance(Board.numCell(position.x) + 1, Board.numCell(target.x), Board.numCell(position.y + 2), Board.numCell(target.y + 2)));
 
-        if (!Board.board[Board.numCell(position.y) - 1][Board.numCell(position.x + 2)] && dir != Direction.down)
-            distances.set(3, calculateDistance(Board.numCell(position.x + 2), Board.numCell(target.x + 2), Board.numCell(position.y) - 1, Board.numCell(target.y)));
+        if (availableDirection.contains(Direction.down))
+            distances.set(1, calculateDistance(Board.numCell(position.x + 2), Board.numCell(target.x + 2), Board.numCell(position.y) + 1, Board.numCell(target.y)));
 
-        if (Board.numCell(position.x) >= 1 && !Board.board[Board.numCell(position.y + 2)][Board.numCell(position.x) - 1] && dir != Direction.right)
+        if (availableDirection.contains(Direction.left))
             distances.set(2, calculateDistance(Board.numCell(position.x) - 1, Board.numCell(target.x), Board.numCell(position.y + 2), Board.numCell(target.y + 2)));
 
-        if (!Board.board[Board.numCell(position.y) + 1][Board.numCell(position.x + 2)] && dir != Direction.up)
-            distances.set(1, calculateDistance(Board.numCell(position.x + 2), Board.numCell(target.x + 2), Board.numCell(position.y) + 1, Board.numCell(target.y)));
+        if (availableDirection.contains(Direction.up))
+            distances.set(3, calculateDistance(Board.numCell(position.x + 2), Board.numCell(target.x + 2), Board.numCell(position.y) - 1, Board.numCell(target.y)));
 
         double minDistance = Collections.min(distances);
         int direction = distances.indexOf(minDistance);
 //        right, down, left, up,
-        dir = Direction.values()[direction];
+        this.direction = Direction.values()[direction];
 
     }
 
@@ -163,7 +163,7 @@ public abstract class Ghost extends ComponentUI {
         scared = true;
 
 //      invert the direction: right, down, left, up,
-        dir = Direction.values()[(dir.ordinal() + 2) % 4];
+        direction = Direction.values()[(direction.ordinal() + 2) % 4];
         step = 1;
 
     }
