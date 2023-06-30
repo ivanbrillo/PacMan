@@ -1,5 +1,3 @@
-package Contenitore.Main;
-
 import java.awt.*;
 
 import javax.swing.Timer;

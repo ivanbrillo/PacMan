@@ -1,11 +1,9 @@
-package Contenitore.Main;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-enum Direction {right, down, left, up, not_moving};
+enum Direction {right, down, left, up, not_moving}
 
 public abstract class ComponentUI extends JPanel {
 
