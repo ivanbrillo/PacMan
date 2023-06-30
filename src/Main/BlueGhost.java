@@ -8,6 +8,8 @@ public class BlueGhost extends Ghost{
     public BlueGhost(Pacman pacman, int x, int y, Direction dir, Ghost rosso){
         super (pacman, x, y, dir, rosso, "blueGhost");
         scatteredPoint = new Point(680, 754);
+        activeGhost = true;
+
     }
 
     public void behaviouralMove(ArrayList<Direction> availableDirection) {

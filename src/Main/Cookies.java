@@ -8,11 +8,11 @@ import java.util.Map;
 public class Cookies extends JPanel {
     private final boolean[][] cookies = new boolean[21][19];
     private final int totalCookies;
-    public boolean startArancione = false;
     private final Map<int[], Boolean> cookiesMap = new HashMap<>();   // position x,y + boolean not eaten
     private int eatenCookies = 0;
+    private final OrangeGhost orangeGhost;
 
-    public Cookies() {
+    public Cookies(OrangeGhost orangeGhost) {
 
         for (int i = 0; i < Board.board.length; i++) {
             cookies[i] = new boolean[Board.board[0].length];
@@ -22,6 +22,7 @@ public class Cookies extends JPanel {
         cookies[9][9] = true;   // ghost home, without cookie
         cookiesGenerator();
         totalCookies = cookiesMap.size();
+        this.orangeGhost = orangeGhost;
 
     }
 
@@ -72,7 +73,7 @@ public class Cookies extends JPanel {
         }
 
         if (eatenCookies == totalCookies / 3)
-            startArancione = true;
+            orangeGhost.setActive();
 
         return eatenCookies == totalCookies;
 

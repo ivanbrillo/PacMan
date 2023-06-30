@@ -8,6 +8,7 @@ public class PinkGhost extends Ghost{
     public PinkGhost(Pacman pacman, int x, int y, Direction dir){
         super(pacman, x, y, dir, "pinkGhost");
         scatteredPoint = new Point(80, 0);
+        activeGhost = true;
 
     }
 

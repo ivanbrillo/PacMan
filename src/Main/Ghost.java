@@ -1,7 +1,7 @@
 package Contenitore.Main;
 
 import java.awt.*;
-import javax.swing.*;
+
 import javax.swing.Timer;
 import java.util.*;
 
@@ -10,12 +10,14 @@ public abstract class Ghost extends ComponentUI {
     private static final Random randomGenerator = new Random();
     private final String ghostName;
     private final Point start;
-    private final Direction startDir;
     public boolean scared = false;
     protected Pacman pacman;
     protected Ghost rosso;
     protected Point scatteredPoint;
     boolean eaten = false;
+    private long scaredTime = 0;
+    // used for orange ghost
+    protected boolean activeGhost;
 
 
     public Ghost(Pacman pacman, int x, int y, Direction dir, String name) {
@@ -27,7 +29,6 @@ public abstract class Ghost extends ComponentUI {
         start = new Point(x, y);
 
         direction = dir;
-        startDir = dir;
     }
 
 
@@ -85,9 +86,15 @@ public abstract class Ghost extends ComponentUI {
     }
 
 
-    public void moveGhost(boolean scatter, Timer timer){
+    public void moveGhost(int milliSecond, Timer timer){
 
-        move(scatter);
+        if(!activeGhost)
+            return;
+
+        if(scared && System.currentTimeMillis() - scaredTime > 8000)
+            notScared();
+
+        move(milliSecond < 5000);
 
         if(eaten)
             move(false);
@@ -179,7 +186,12 @@ public abstract class Ghost extends ComponentUI {
     }
 
     public void scared() {
+
+        if(!activeGhost)
+            return;
+
         scared = true;
+        scaredTime = System.currentTimeMillis();
 
 //      invert the direction: right, down, left, up,
         direction = Direction.values()[(direction.ordinal() + 2) % 4];
