@@ -38,6 +38,10 @@ public abstract class Ghost extends ComponentUI {
         this.rosso = rosso;
     }
 
+    public void setActive(boolean active){
+        activeGhost = active;
+    }
+
     private static boolean canMoveTo(int row, int col) {
         return row >= 0 && row < Board.board.length && col >= 0 && col < Board.board[0].length && !Board.board[row][col];
     }

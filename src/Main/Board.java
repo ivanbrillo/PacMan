@@ -42,7 +42,7 @@ public class Board extends KeyAdapter implements ActionListener {
     private final ArrayList<Ghost> ghosts = new ArrayList<>(Arrays.asList(redGhost, orangeGhost, new BlueGhost(pacman, 290, 324, Direction.right, redGhost), new PinkGhost(pacman, 326, 324, Direction.up)));
 
     private final Cookies cookies = new Cookies(orangeGhost);
-    boolean game = true;
+    boolean game = false;
     private int milliSeconds = 0;
 
 
@@ -68,13 +68,14 @@ public class Board extends KeyAdapter implements ActionListener {
     @Override
     public void keyPressed(KeyEvent e) {
 
-        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-
-            // TODO: 08/06/2023 what if win
-
-        } else {
-            pacman.setDirection(e.getKeyCode());
+        if (!game) {
+            for (Ghost ghost : ghosts)
+                ghost.setActive(true);
+            orangeGhost.setActive(false);
+            boardUI.setText("");
         }
+
+        pacman.setDirection(e.getKeyCode());
 
     }
 
@@ -85,9 +86,10 @@ public class Board extends KeyAdapter implements ActionListener {
 
         pacman.move();
 
-        if(cookies.eatCookies(pacman.position)){
+        if (cookies.eatCookies(pacman.position)) {
             timer.stop();
             game = false;
+            boardUI.setText("You won!");
         }
 
         if (apple.checkMela(pacman.position))
@@ -100,6 +102,7 @@ public class Board extends KeyAdapter implements ActionListener {
         if (timer.getActionCommand().equals("game ended")) {
             timer.stop();
             game = false;
+            boardUI.setText("You lose!");
         }
 
         boardUI.repaint();

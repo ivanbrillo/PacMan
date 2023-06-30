@@ -8,7 +8,6 @@ public class OrangeGhost extends Ghost {
     public OrangeGhost(Pacman pacman, int x, int y, Direction dir, Ghost rosso) {
         super(pacman, x, y, dir, rosso, "orangeGhost");
         scatteredPoint = new Point(50, 754);
-        activeGhost = false;
     }
 
     public void behaviouralMove(ArrayList<Direction> availableDirection) {
@@ -20,9 +19,7 @@ public class OrangeGhost extends Ghost {
 
     }
 
-    public void setActive(){
-        activeGhost = true;
-    }
+
 }
 
 

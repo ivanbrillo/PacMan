@@ -72,8 +72,8 @@ public class Cookies extends JPanel {
             }
         }
 
-        if (eatenCookies == totalCookies / 3)
-            orangeGhost.setActive();
+        if (eatenCookies > totalCookies / 3)
+            orangeGhost.setActive(true);
 
         return eatenCookies == totalCookies;
 
