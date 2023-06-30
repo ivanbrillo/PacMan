@@ -63,12 +63,16 @@ public class Pacman extends ComponentUI {
     private void newDirection() {
 
         // no direction changing when teleporting
-        if((Board.numCell(position.x) == 0 || Board.numCell(position.x) == 18) && Board.numCell(position.y) == 9 )
+        if ((Board.numCell(position.x) == 0 || Board.numCell(position.x) == 18) && Board.numCell(position.y) == 9)
             return;
+
+        //handle change of degree 180 of the direction
+        if (direction == null || savedDirection == Direction.values()[(direction.ordinal() + 2) % 4])
+            direction = savedDirection;
 
         if (savedDirection == Direction.right && direction != Direction.right && Board.checkAngle(position.y) && !Board.board[Board.numCell(position.y)][Board.numCell(position.x) + 1])
             direction = Direction.right;
-        else if (savedDirection == Direction.left && direction != Direction.left && Board.checkAngle(position.y) && !Board.board[Board.numCell(position.y)][Board.numCell(position.x) - 1])
+        else if (savedDirection == Direction.left && direction != Direction.left &&  Board.checkAngle(position.y) && !Board.board[Board.numCell(position.y)][Board.numCell(position.x) - 1])
             direction = Direction.left;
         else if (savedDirection == Direction.down && direction != Direction.down && Board.checkAngle(position.x) && !Board.board[Board.numCell(position.y) + 1][Board.numCell(position.x)])
             direction = Direction.down;

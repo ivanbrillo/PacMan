@@ -14,7 +14,7 @@ public class Main {
 
         frame.addKeyListener(board);
         frame.setVisible(true);
-        frame.setResizable(true);
+        frame.setResizable(false);
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
 
     }

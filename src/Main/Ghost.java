@@ -1,13 +1,13 @@
 package Contenitore.Main;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Random;
+import javax.swing.*;
+import javax.swing.Timer;
+import java.util.*;
 
 public abstract class Ghost extends ComponentUI {
 
+    private static final Random randomGenerator = new Random();
     private final String ghostName;
     private final Point start;
     private final Direction startDir;
@@ -16,7 +16,6 @@ public abstract class Ghost extends ComponentUI {
     protected Ghost rosso;
     protected Point scatteredPoint;
     boolean eaten = false;
-    Random randomGenerator = new Random();
 
 
     public Ghost(Pacman pacman, int x, int y, Direction dir, String name) {
@@ -55,7 +54,7 @@ public abstract class Ghost extends ComponentUI {
 
         // when an eaten ghost return to the spawn point
         if (eaten && Board.numCell(position.x) == 9 && Board.numCell(position.y) == 7)
-            eaten = false;
+            setEaten(false);
 
         // handle teleporting
         if (Board.numCell(position.y) == 9 && (Board.numCell(position.x) == 17 || Board.numCell(position.x) == 18 || Board.numCell(position.x) == 19) && direction == Direction.right) {
@@ -85,7 +84,27 @@ public abstract class Ghost extends ComponentUI {
         return false;
     }
 
-    public void move(boolean scatter) {
+
+    public void moveGhost(boolean scatter, Timer timer){
+
+        move(scatter);
+
+        if(eaten)
+            move(false);
+
+        Rectangle pacmanR = new Rectangle(pacman.position, new Dimension(10,10));
+        Rectangle ghostR = new Rectangle(position, new Dimension(10,10));
+
+        if (!scared && pacmanR.intersects(ghostR) && !eaten )
+            timer.setActionCommand("game ended");
+        else
+            if (scared && pacmanR.intersects(ghostR))
+                setEaten(true);
+
+    }
+
+    private void move(boolean scatter) {
+
         if (updatePosition())
             return;
 
@@ -168,16 +187,24 @@ public abstract class Ghost extends ComponentUI {
 
     }
 
-    public void norm() {
-        this.scared = false;
-        if (position.x % 2 != 0) {
-            position.x++;
-        }
-        if (position.y % 2 != 0) {
-            position.y++;
-        }
+    public void notScared() {
+        scared = false;
+
+        // solve the allignment problem that can be caused by the previous step = 1
+        if (position.x % 2 != 0)
+            position.x--;
+
+        if (position.y % 2 != 0)
+            position.y--;
 
         step = 2;
+    }
+
+    public void setEaten(boolean eaten) {
+
+        notScared();
+        this.eaten = eaten;
+
     }
 
     public void draw(Graphics g) {
