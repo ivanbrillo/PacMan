@@ -27,6 +27,8 @@ public abstract class Ghost extends ComponentUI {
         start = new Point(x, y);
 
         direction = dir;
+        initialDirection = direction;
+
     }
 
 
@@ -49,6 +51,15 @@ public abstract class Ghost extends ComponentUI {
     }
 
     public abstract void behaviouralMove(ArrayList<Direction> availableDirections);
+
+
+    public void resetComponent(){
+        super.resetComponent();
+        eaten = false;
+        scared = false;
+    }
+
+
 
     /**
      * @return true if the ghost is on teleporting point

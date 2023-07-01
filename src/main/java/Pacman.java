@@ -10,6 +10,7 @@ public class Pacman extends ComponentUI {
     public Pacman() {
         super("pacman1", new Point(324, 540));
         direction = Direction.not_moving;
+        initialDirection = direction;
     }
 
     public void move() {

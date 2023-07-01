@@ -7,9 +7,11 @@ enum Direction {right, down, left, up, not_moving}
 
 public abstract class ComponentUI extends JPanel {
 
-    protected final Point position;
+    protected Point position;
+    private final Point initialPosition;
     private final Map<String, Image> images = new HashMap<>();
     protected Direction direction;
+    protected Direction initialDirection;
     protected int step = 2;
     private Image image;
     private String lastPath = "";
@@ -18,7 +20,13 @@ public abstract class ComponentUI extends JPanel {
 
         setImage(imgName);
         this.position = position;
+        initialPosition = new Point(position);
 
+    }
+
+    public void resetComponent(){
+        position = new Point(initialPosition);
+        direction = initialDirection;
     }
 
     public void setImage(String imgName) {

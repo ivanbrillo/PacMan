@@ -1,8 +1,9 @@
+import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.Vector;
 
-public class Apple {
+public class Apple extends JPanel {
 
     private static final Point[] applePos = {    // row - column
             new Point(1, 2), new Point(1, 15), new Point(17, 15), new Point(17, 2)};

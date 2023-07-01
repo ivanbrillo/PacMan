@@ -7,16 +7,20 @@ public class BoardUI extends JPanel {
     private final Image background = Toolkit.getDefaultToolkit().createImage("./src/images/" + "board.png");
     private final ArrayList<ComponentUI> components;
 
-    private final Cookies cookies;
-    private final Apple apple;
+    private Cookies cookies;
+    private Apple apple;
     private String text = "Press any key to start the Game";
 
     public BoardUI(ArrayList<ComponentUI> components, Cookies cookies, Apple apple) {
 
         this.components = components;
+        reset(cookies, apple);
+
+    }
+
+    public void reset(Cookies cookies, Apple apple) {
         this.cookies = cookies;
         this.apple = apple;
-
     }
 
     public void setText(String text) {

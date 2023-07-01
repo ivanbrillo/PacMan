@@ -32,14 +32,14 @@ public class Board extends KeyAdapter implements ActionListener {
 
     public final BoardUI boardUI;
     private final Timer timer = new Timer(30, this);
-    private final Apple apple = new Apple();
+    private Apple apple = new Apple();
     private final Pacman pacman = new Pacman();
 
     private final Ghost redGhost = new RedGhost(pacman, 326, 252, Direction.right);
     private final OrangeGhost orangeGhost = new OrangeGhost(pacman, 358, 324, Direction.left, redGhost);
     private final ArrayList<Ghost> ghosts = new ArrayList<>(Arrays.asList(redGhost, orangeGhost, new BlueGhost(pacman, 290, 324, Direction.right, redGhost), new PinkGhost(pacman, 326, 324, Direction.up)));
 
-    private final Cookies cookies = new Cookies(orangeGhost);
+    private Cookies cookies = new Cookies(orangeGhost);
     boolean game = false;
     private int milliSeconds = 0;
 
@@ -50,7 +50,6 @@ public class Board extends KeyAdapter implements ActionListener {
         component.add(pacman);
 
         boardUI = new BoardUI(component, cookies, apple);
-        timer.start();
         timer.setActionCommand("game in progress");
 
     }
@@ -67,10 +66,24 @@ public class Board extends KeyAdapter implements ActionListener {
     public void keyPressed(KeyEvent e) {
 
         if (!game) {
-            for (Ghost ghost : ghosts)
+            for (Ghost ghost : ghosts) {
+                ghost.resetComponent();
                 ghost.setActive(true);
+            }
             orangeGhost.setActive(false);
+            pacman.resetComponent();
+
+            cookies = new Cookies(orangeGhost);
+            apple = new Apple();
+
+            boardUI.reset(cookies, apple);
+            timer.start();
+            timer.setActionCommand("game in progress");
+            game = true;
+
             boardUI.setText("");
+            milliSeconds = 0;
+
         }
 
         pacman.setDirection(e.getKeyCode());
@@ -81,13 +94,12 @@ public class Board extends KeyAdapter implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         milliSeconds += 30;
-
         pacman.move();
 
         if (cookies.eatCookies(pacman.position)) {
             timer.stop();
             game = false;
-            boardUI.setText("You won!");
+            boardUI.setText("You won! press any key to restart");
         }
 
         if (apple.checkMela(pacman.position))
@@ -100,7 +112,7 @@ public class Board extends KeyAdapter implements ActionListener {
         if (timer.getActionCommand().equals("game ended")) {
             timer.stop();
             game = false;
-            boardUI.setText("You lose!");
+            boardUI.setText("You lose! press any key to restart");
         }
 
         boardUI.repaint();
