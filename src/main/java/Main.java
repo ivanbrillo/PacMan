@@ -12,30 +12,20 @@ public class Main {
         JFrame frame = new JFrame();
         frame.setTitle("Pacman Game");
 
-
-
-
-
         frame.setIconImage(Toolkit.getDefaultToolkit().createImage("./src/images/redGhost.png"));
         Board board = new Board(frame);
         Menu menu = new Menu(board);
-//        frame.add(board.boardUI);
-//        frame.add(new Menu());
         frame.setSize(696, 832);
 
         JPanel container = new JPanel();
         container.setLayout(null);
-
         container.add(board.boardUI);
         container.add(menu);
-
         frame.add(container);
-
-
 
         frame.addKeyListener(board);
         frame.setVisible(true);
-//        frame.setResizable(false);
+        frame.setResizable(false);
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
 
     }
