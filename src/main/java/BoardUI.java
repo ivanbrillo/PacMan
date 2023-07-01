@@ -15,6 +15,7 @@ public class BoardUI extends JPanel {
 
         this.components = components;
         reset(cookies, apple);
+        setBounds(0, 0, 696, 792);
 
     }
 
