@@ -42,15 +42,17 @@ public class Board extends KeyAdapter implements ActionListener {
     private Cookies cookies = new Cookies(orangeGhost);
     boolean game = false;
     private int milliSeconds = 0;
+    private final JFrame frame;
 
 
-    public Board() {
+    public Board(JFrame frame) {
 
         ArrayList<ComponentUI> component = new ArrayList<>(ghosts);
         component.add(pacman);
 
         boardUI = new BoardUI(component, cookies, apple);
         timer.setActionCommand("game in progress");
+        this.frame = frame;
 
     }
 
@@ -62,28 +64,49 @@ public class Board extends KeyAdapter implements ActionListener {
         return position % 36 == 0;
     }
 
+    public int getCookiesEaten(){
+        return cookies.eatenCookies;
+    }
+
+    public void resetBoard(String text){
+
+        for (Ghost ghost : ghosts) {
+            ghost.resetComponent();
+            ghost.setActive(true);
+        }
+        orangeGhost.setActive(false);
+        pacman.resetComponent();
+
+        cookies = new Cookies(orangeGhost);
+        apple = new Apple();
+
+        boardUI.reset(cookies, apple);
+        timer.setActionCommand("game in progress");
+
+        // restart the board but with everything not moving
+        timer.stop();
+        game = false;
+
+        boardUI.setText(text);
+        milliSeconds = 0;
+
+        boardUI.repaint();
+
+
+    }
+
     @Override
     public void keyPressed(KeyEvent e) {
 
+
         if (!game) {
-            for (Ghost ghost : ghosts) {
-                ghost.resetComponent();
-                ghost.setActive(true);
+            String text = boardUI.text.contains("restart") ? "Press any key to start the Game" : "";
+            resetBoard(text);
+
+            if(text.equals("")) {
+                timer.start();
+                game = true;
             }
-            orangeGhost.setActive(false);
-            pacman.resetComponent();
-
-            cookies = new Cookies(orangeGhost);
-            apple = new Apple();
-
-            boardUI.reset(cookies, apple);
-            timer.start();
-            timer.setActionCommand("game in progress");
-            game = true;
-
-            boardUI.setText("");
-            milliSeconds = 0;
-
         }
 
         pacman.setDirection(e.getKeyCode());
@@ -115,7 +138,8 @@ public class Board extends KeyAdapter implements ActionListener {
             boardUI.setText("You lose! press any key to restart");
         }
 
-        boardUI.repaint();
+//        boardUI.repaint();
+        frame.repaint();
 
     }
 }

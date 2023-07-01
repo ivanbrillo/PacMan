@@ -9,7 +9,7 @@ public class BoardUI extends JPanel {
 
     private Cookies cookies;
     private Apple apple;
-    private String text = "Press any key to start the Game";
+    public String text = "Press any key to start the Game";
 
     public BoardUI(ArrayList<ComponentUI> components, Cookies cookies, Apple apple) {
 
@@ -42,7 +42,7 @@ public class BoardUI extends JPanel {
             component.draw(g);
 
         g.setColor(Color.white);
-        g.setFont(new Font("Bahnschrift", Font.BOLD, 30));
+        g.setFont(new Font("", Font.BOLD, 30));
         g.drawString(text, (getWidth() - g.getFontMetrics().stringWidth(text)) / 2, 460);
 
 

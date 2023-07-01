@@ -7,7 +7,7 @@ public class Cookies extends JPanel {
     private final boolean[][] cookies = new boolean[21][19];
     private final int totalCookies;
     private final Map<int[], Boolean> cookiesMap = new HashMap<>();   // position x,y + boolean not eaten
-    private int eatenCookies = 0;
+    public int eatenCookies = 0;
     private final OrangeGhost orangeGhost;
 
     public Cookies(OrangeGhost orangeGhost) {
