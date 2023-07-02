@@ -8,7 +8,7 @@ public class Pacman extends ComponentUI {
     private Direction savedDirection;
 
     public Pacman() {
-        super("pacman1", new Point(324, 540));
+        super("pacmanFull", new Point(324, 540));
         direction = Direction.not_moving;
         initialDirection = direction;
     }

@@ -27,6 +27,7 @@ public abstract class ComponentUI extends JPanel {
     public void resetComponent(){
         position = new Point(initialPosition);
         direction = initialDirection;
+        setImage("pacmanFull");
     }
 
     public void setImage(String imgName) {
