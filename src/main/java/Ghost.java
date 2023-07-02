@@ -239,7 +239,7 @@ public abstract class Ghost extends ComponentUI {
         else if (eaten)
             setImage("eyes");
         else
-            setImage(ghostName);
+            setImage(ghostName+(direction.ordinal()+1));
 
         super.draw(g);
 

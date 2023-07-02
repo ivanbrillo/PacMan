@@ -12,7 +12,7 @@ public class Main {
         JFrame frame = new JFrame();
         frame.setTitle("Pacman Game");
 
-        frame.setIconImage(Toolkit.getDefaultToolkit().createImage("./src/images/redGhost.png"));
+        frame.setIconImage(Toolkit.getDefaultToolkit().createImage("./src/images/pacman1.png"));
         Board board = new Board(frame);
         Menu menu = new Menu(board);
         frame.setSize(696, 832);
